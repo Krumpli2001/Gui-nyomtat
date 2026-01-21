@@ -8,9 +8,9 @@
 #include <windows.h>
 #include <gdiplus.h>
 #include <stdlib.h> // a wchar konverziohoz
-#include <thread>
-#include <chrono>
-
+//#include <thread>
+//#include <chrono>
+//
 #pragma comment(lib, "gdiplus.lib")
 #pragma comment(lib, "gdi32.lib")
 #pragma comment(lib, "comdlg32.lib")
@@ -51,16 +51,10 @@ void nyomtatas(int K, int V, const std::string &Fajta, int EvI, const std::strin
 	// Nyomtato kivalasztasa (az alapertelmezettre, ha nem akkor meg dobjon ablakot a PDFhez)
 	PRINTDLG pd = { 0 };
 	pd.lStructSize = sizeof(pd);
-	pd.Flags = PD_RETURNDC | PD_RETURNDEFAULT;
+	pd.Flags = PD_RETURNDC;
 	//pd.Flags = PD_RETURNDC;
 
 	std::cout << "Elhagytam1\n";
-
-	// No nyomtató
-	if (!PrintDlg(&pd)) {
-		std::cout << ("Could not find default printer.\n");
-		System::Windows::Forms::MessageBox::Show("Nem található az alapértelmezett nyomtató");
-	}
 
 	std::cout << "Elhagytam1\n";
 
@@ -68,11 +62,19 @@ void nyomtatas(int K, int V, const std::string &Fajta, int EvI, const std::strin
 	HDC hdc;
 	//Nyomtato hDC
 	if (nyom) {
+
+		// No nyomtató
+	if (!PrintDlg(&pd)) {
+		std::cout << ("Could not find default printer.\n");
+		System::Windows::Forms::MessageBox::Show("Nem található az alapértelmezett nyomtató");
+	}
 		hdc = pd.hDC;
 	}
 	else {
 		hdc = CreateDC(L"WINSPOOL", L"Microsoft Print to PDF", NULL, NULL);
 	}
+
+	
 	
 	std::cout << "Elhagytam1\n";
 
@@ -87,7 +89,7 @@ void nyomtatas(int K, int V, const std::string &Fajta, int EvI, const std::strin
 		auto kezdet = K;
 		auto veg = V;
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(500));
+		//std::this_thread::sleep_for(std::chrono::milliseconds(500));
 		std::cout << "Elhagytam1\n";
 
 		//Nyomtatas megkezdese, hdc es docifo atadasa
@@ -108,11 +110,17 @@ void nyomtatas(int K, int V, const std::string &Fajta, int EvI, const std::strin
 				//ezzel "megkezd egy uj papir lapot"
 				if (StartPage(hdc) != 0) {
 
+					HFONT hFont = CreateFontW(50, 0, 0, 0, FW_NORMAL, 0, 0, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Arial");
+
+					auto hOldFont = (HFONT)SelectObject(hdc, hFont);
+
 					//a koordinatak elvileg pixelekben vannak
 					//kep nyomtatasa + koordinatak
 					Gdiplus::Graphics graphics(hdc);
-					graphics.DrawImage(&image, 0, 0, 50, 79);
-					std::cout<<std::format("{} {}", image.GetWidth(), image.GetHeight());
+					auto w = 40;
+					auto h = 64;
+					graphics.DrawImage(&image, 0, 0, w, h);
+					std::cout<<std::format("{} {}\n", w, h);
 
 					//Milyen stringet irjon ki + koordinatak
 					const wchar_t* MOB = L"MOB";
@@ -121,7 +129,7 @@ void nyomtatas(int K, int V, const std::string &Fajta, int EvI, const std::strin
 					if (Fajta == "MOB") {
 						auto faj = "MOB-" + IntervalumK + '/' + Ev;
 						auto wfaj = to_wchar(faj);
-						TextOut(hdc, 380, 200, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
+						TextOutW(hdc, 380, 200, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
 						auto e = Erkezett;
 						auto seged = to_wchar(e);
 						auto we = L"Érkezett: ";
@@ -129,16 +137,16 @@ void nyomtatas(int K, int V, const std::string &Fajta, int EvI, const std::strin
 						auto erk = std::make_unique<wchar_t[]>(newsize);
 						wcsncat_s(erk.get(), newsize, we, wcslen(we));
 						wcsncat_s(erk.get(), newsize, seged.get(), wcslen(seged.get()));
-						TextOut(hdc, 300, 350, erk.get(), static_cast<int>(wcslen(erk.get())));
+						TextOutW(hdc, 300, 350, erk.get(), static_cast<int>(wcslen(erk.get())));
 					}
 
 					if (Fajta == "SZLA") {
 						F = 1;
 						auto szla = L"SZLA-";
-						TextOut(hdc, 580, 150, szla, static_cast<int>(wcslen(szla)));
+						TextOutW(hdc, 580, 150, szla, static_cast<int>(wcslen(szla)));
 						auto faj = IntervalumK + '/' + Ev;
 						auto wfaj = to_wchar(faj);
-						TextOut(hdc, 480, 250, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
+						TextOutW(hdc, 480, 250, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
 						auto e = Erkezett;
 						auto seged = to_wchar(e);
 						auto we = L"Érkezett: ";
@@ -146,16 +154,16 @@ void nyomtatas(int K, int V, const std::string &Fajta, int EvI, const std::strin
 						auto erk = std::make_unique<wchar_t[]>(newsize);
 						wcsncat_s(erk.get(), newsize, we, wcslen(we));
 						wcsncat_s(erk.get(), newsize, seged.get(), wcslen(seged.get()));
-						TextOut(hdc, 300, 350, erk.get(), static_cast<int>(wcslen(erk.get())));
+						TextOutW(hdc, 300, 350, erk.get(), static_cast<int>(wcslen(erk.get())));
 					}
 
 					if (Fajta == "MOB-DOK") {
 						F = 2;
 						auto mobdok = L"MOB-DOK-";
-						TextOut(hdc, 500, 150, mobdok, static_cast<int>(wcslen(mobdok)));
+						TextOutW(hdc, 500, 150, mobdok, static_cast<int>(wcslen(mobdok)));
 						auto faj = IntervalumK + '/' + Ev;
 						auto wfaj = to_wchar(faj);
-						TextOut(hdc, 500, 250, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
+						TextOutW(hdc, 500, 250, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
 						auto e = Erkezett;
 						auto seged = to_wchar(e);
 						auto we = L"Érkezett: ";
@@ -163,7 +171,7 @@ void nyomtatas(int K, int V, const std::string &Fajta, int EvI, const std::strin
 						auto erk = std::make_unique<wchar_t[]>(newsize);
 						wcsncat_s(erk.get(), newsize, we, wcslen(we));
 						wcsncat_s(erk.get(), newsize, seged.get(), wcslen(seged.get()));
-						TextOut(hdc, 300, 350, erk.get(), static_cast<int>(wcslen(erk.get())));
+						TextOutW(hdc, 300, 350, erk.get(), static_cast<int>(wcslen(erk.get())));
 					}
 
 					EndPage(hdc);
