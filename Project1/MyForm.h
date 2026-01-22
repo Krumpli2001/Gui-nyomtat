@@ -54,29 +54,19 @@ void nyomtatas(int K, int V, const std::string &Fajta, int EvI, const std::strin
 	pd.Flags = PD_RETURNDC;
 	//pd.Flags = PD_RETURNDC;
 
-	std::cout << "Elhagytam1\n";
-
-	std::cout << "Elhagytam1\n";
-
-
 	HDC hdc;
 	//Nyomtato hDC
 	if (nyom) {
-
 		// No nyomtató
-	if (!PrintDlg(&pd)) {
-		std::cout << ("Could not find default printer.\n");
-		System::Windows::Forms::MessageBox::Show("Nem található az alapértelmezett nyomtató");
-	}
+		if (!PrintDlgW(&pd)) {
+			std::cout << ("Could not find default printer.\n");
+			System::Windows::Forms::MessageBox::Show("Nem található az alapértelmezett nyomtató");
+		}
 		hdc = pd.hDC;
 	}
 	else {
-		hdc = CreateDC(L"WINSPOOL", L"Microsoft Print to PDF", NULL, NULL);
+		hdc = CreateDCW(L"WINSPOOL", L"Microsoft Print to PDF", NULL, NULL);
 	}
-
-	
-	
-	std::cout << "Elhagytam1\n";
 
 	//kep letrehozasa, file nevvel
 	Gdiplus::Image image(L"Hungarian_Olympic_Committee_logo.bmp");
@@ -89,12 +79,8 @@ void nyomtatas(int K, int V, const std::string &Fajta, int EvI, const std::strin
 		auto kezdet = K;
 		auto veg = V;
 
-		//std::this_thread::sleep_for(std::chrono::milliseconds(500));
-		std::cout << "Elhagytam1\n";
-
 		//Nyomtatas megkezdese, hdc es docifo atadasa
-		if (StartDoc(hdc, &di) > 0) {
-			std::cout << "Elhagytam1\n";
+		if (StartDocW(hdc, &di) > 0) {
 
 
 			while (kezdet <= veg) {
@@ -110,7 +96,7 @@ void nyomtatas(int K, int V, const std::string &Fajta, int EvI, const std::strin
 				//ezzel "megkezd egy uj papir lapot"
 				if (StartPage(hdc) != 0) {
 
-					HFONT hFont = CreateFontW(50, 0, 0, 0, FW_NORMAL, 0, 0, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Arial");
+					HFONT hFont = CreateFontW(50, 0, 0, 0, FW_NORMAL, 0, 0, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, NONANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Arial");
 
 					auto hOldFont = (HFONT)SelectObject(hdc, hFont);
 
@@ -124,7 +110,7 @@ void nyomtatas(int K, int V, const std::string &Fajta, int EvI, const std::strin
 
 					//Milyen stringet irjon ki + koordinatak
 					const wchar_t* MOB = L"MOB";
-					TextOut(hdc, 600, 50, MOB, static_cast<int>(wcslen(MOB)));
+					TextOutW(hdc, 600, 50, MOB, static_cast<int>(wcslen(MOB)));
 
 					if (Fajta == "MOB") {
 						auto faj = "MOB-" + IntervalumK + '/' + Ev;
@@ -140,7 +126,7 @@ void nyomtatas(int K, int V, const std::string &Fajta, int EvI, const std::strin
 						TextOutW(hdc, 300, 350, erk.get(), static_cast<int>(wcslen(erk.get())));
 					}
 
-					if (Fajta == "SZLA") {
+					else if (Fajta == "SZLA") {
 						F = 1;
 						auto szla = L"SZLA-";
 						TextOutW(hdc, 580, 150, szla, static_cast<int>(wcslen(szla)));
@@ -157,7 +143,7 @@ void nyomtatas(int K, int V, const std::string &Fajta, int EvI, const std::strin
 						TextOutW(hdc, 300, 350, erk.get(), static_cast<int>(wcslen(erk.get())));
 					}
 
-					if (Fajta == "MOB-DOK") {
+					else if (Fajta == "MOB-DOK") {
 						F = 2;
 						auto mobdok = L"MOB-DOK-";
 						TextOutW(hdc, 500, 150, mobdok, static_cast<int>(wcslen(mobdok)));
@@ -173,6 +159,60 @@ void nyomtatas(int K, int V, const std::string &Fajta, int EvI, const std::strin
 						wcsncat_s(erk.get(), newsize, seged.get(), wcslen(seged.get()));
 						TextOutW(hdc, 300, 350, erk.get(), static_cast<int>(wcslen(erk.get())));
 					}
+
+					else if (Fajta == "SÁVB") {
+						F = 3;
+						auto mobdok = L"SÁVB-";
+						TextOutW(hdc, 500, 150, mobdok, static_cast<int>(wcslen(mobdok)));
+						auto faj = IntervalumK + '/' + Ev;
+						auto wfaj = to_wchar(faj);
+						TextOutW(hdc, 500, 250, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
+						auto e = Erkezett;
+						auto seged = to_wchar(e);
+						auto we = L"Érkezett: ";
+						auto newsize = wcslen(we) + wcslen(seged.get()) + 1;
+						auto erk = std::make_unique<wchar_t[]>(newsize);
+						wcsncat_s(erk.get(), newsize, we, wcslen(we));
+						wcsncat_s(erk.get(), newsize, seged.get(), wcslen(seged.get()));
+						TextOutW(hdc, 300, 350, erk.get(), static_cast<int>(wcslen(erk.get())));
+					}
+
+					else if (Fajta == "MOB-2K-") {
+						F = 4;
+						auto mobdok = L"MOB-2K";
+						TextOutW(hdc, 500, 150, mobdok, static_cast<int>(wcslen(mobdok)));
+						auto faj = IntervalumK + '/' + Ev;
+						auto wfaj = to_wchar(faj);
+						TextOutW(hdc, 500, 250, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
+						auto e = Erkezett;
+						auto seged = to_wchar(e);
+						auto we = L"Érkezett: ";
+						auto newsize = wcslen(we) + wcslen(seged.get()) + 1;
+						auto erk = std::make_unique<wchar_t[]>(newsize);
+						wcsncat_s(erk.get(), newsize, we, wcslen(we));
+						wcsncat_s(erk.get(), newsize, seged.get(), wcslen(seged.get()));
+						TextOutW(hdc, 300, 350, erk.get(), static_cast<int>(wcslen(erk.get())));
+					}
+
+					else if (Fajta == "MOB-BÉR") {
+						F = 5;
+						auto mobdok = L"MOB-BÉR-";
+						TextOutW(hdc, 500, 150, mobdok, static_cast<int>(wcslen(mobdok)));
+						auto faj = IntervalumK + '/' + Ev;
+						auto wfaj = to_wchar(faj);
+						TextOutW(hdc, 500, 250, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
+						auto e = Erkezett;
+						auto seged = to_wchar(e);
+						auto we = L"Érkezett: ";
+						auto newsize = wcslen(we) + wcslen(seged.get()) + 1;
+						auto erk = std::make_unique<wchar_t[]>(newsize);
+						wcsncat_s(erk.get(), newsize, we, wcslen(we));
+						wcsncat_s(erk.get(), newsize, seged.get(), wcslen(seged.get()));
+						TextOutW(hdc, 300, 350, erk.get(), static_cast<int>(wcslen(erk.get())));
+					}
+
+					SelectObject(hdc, hOldFont);
+					DeleteObject(hFont);
 
 					EndPage(hdc);
 				}
@@ -220,6 +260,13 @@ namespace Project1 {
 			//TODO: Add the constructor code here
 			//
 
+			auto port = std::string("Manualisan ne ird felul - SA");
+			auto Fajta = std::string("0");
+			auto Ev = std::string("2026");
+			auto IntervalumK = std::string("0");
+			auto IntervalumV = std::string("0");
+			auto Erkezett = std::string("2026.1.22");
+
 			std::string line;
 			std::string conf;
 			std::ifstream settings("settings.txt");
@@ -227,14 +274,15 @@ namespace Project1 {
 				while (std::getline(settings, line)) {
 					conf += line + '\n';
 				}
-			}
+				settings.close();
 
-			auto port = conf.substr(0, find_nth_of(conf, 1, '\n'));
-			auto Fajta = conf.substr(find_nth_of(conf, 1, '\n') + 1, find_nth_of(conf, 2, '\n') - find_nth_of(conf, 1, '\n') - 1);
-			auto Ev = conf.substr(find_nth_of(conf, 2, '\n') + 1, find_nth_of(conf, 3, '\n') - find_nth_of(conf, 2, '\n') - 1);
-			auto IntervalumK = conf.substr(find_nth_of(conf, 3, '\n') + 1, find_nth_of(conf, 4, '\n') - find_nth_of(conf, 3, '\n') - 1);
-			auto IntervalumV = conf.substr(find_nth_of(conf, 4, '\n') + 1, find_nth_of(conf, 5, '\n') - find_nth_of(conf, 4, '\n') - 1);
-			auto Erkezett = conf.substr(find_nth_of(conf, 5, '\n') + 1, find_nth_of(conf, 6, '\n') - find_nth_of(conf, 5, '\n') - 1);
+				port = conf.substr(0, find_nth_of(conf, 1, '\n'));
+				Fajta = conf.substr(find_nth_of(conf, 1, '\n') + 1, find_nth_of(conf, 2, '\n') - find_nth_of(conf, 1, '\n') - 1);
+				Ev = conf.substr(find_nth_of(conf, 2, '\n') + 1, find_nth_of(conf, 3, '\n') - find_nth_of(conf, 2, '\n') - 1);
+				IntervalumK = conf.substr(find_nth_of(conf, 3, '\n') + 1, find_nth_of(conf, 4, '\n') - find_nth_of(conf, 3, '\n') - 1);
+				IntervalumV = conf.substr(find_nth_of(conf, 4, '\n') + 1, find_nth_of(conf, 5, '\n') - find_nth_of(conf, 4, '\n') - 1);
+				Erkezett = conf.substr(find_nth_of(conf, 5, '\n') + 1, find_nth_of(conf, 6, '\n') - find_nth_of(conf, 5, '\n') - 1);
+			}			
 
 			this->comboBox1->SelectedIndex = std::stoi(Fajta);
 			this->numericUpDown1->Value = std::stoi(Ev);
@@ -350,7 +398,10 @@ namespace Project1 {
 			// comboBox1
 			// 
 			this->comboBox1->FormattingEnabled = true;
-			this->comboBox1->Items->AddRange(gcnew cli::array< System::Object^  >(3) { L"MOB", L"SZLA", L"MOB-DOK" });
+			this->comboBox1->Items->AddRange(gcnew cli::array< System::Object^  >(6) {
+				L"MOB", L"SZLA", L"MOB-DOK", L"SÁVB", L"MOB-2K",
+					L"MOB-BÉR"
+			});
 			this->comboBox1->Location = System::Drawing::Point(126, 12);
 			this->comboBox1->Name = L"comboBox1";
 			this->comboBox1->Size = System::Drawing::Size(121, 21);
