@@ -8,9 +8,9 @@
 #include <windows.h>
 #include <gdiplus.h>
 #include <stdlib.h> // a wchar konverziohoz
-//#include <thread>
-//#include <chrono>
-//
+#include <thread>
+#include <chrono>
+
 #pragma comment(lib, "gdiplus.lib")
 #pragma comment(lib, "gdi32.lib")
 #pragma comment(lib, "comdlg32.lib")
@@ -45,23 +45,23 @@ auto to_wchar(const std::string& str) {
 	return wcstring;
 }
 
-void nyomtatas(int K, int V, const std::string &Fajta, int EvI, const std::string &Erkezett, int nyom) {
+void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, int nyom) {
 	auto Ev = std::to_string(EvI);
 	auto F = 0;
 	// Nyomtato kivalasztasa (az alapertelmezettre, ha nem akkor meg dobjon ablakot a PDFhez)
 	PRINTDLG pd = { 0 };
 	pd.lStructSize = sizeof(pd);
-	pd.Flags = PD_RETURNDC;
-	//pd.Flags = PD_RETURNDC;
+	pd.Flags = PD_RETURNDC | PD_RETURNDEFAULT;
+
+	// No nyomtató
+	if (!PrintDlgW(&pd)) {
+		std::cout << ("Could not find default printer.\n");
+		System::Windows::Forms::MessageBox::Show("Nem található az alapértelmezett nyomtató");
+	}
 
 	HDC hdc;
 	//Nyomtato hDC
 	if (nyom) {
-		// No nyomtató
-		if (!PrintDlgW(&pd)) {
-			std::cout << ("Could not find default printer.\n");
-			System::Windows::Forms::MessageBox::Show("Nem található az alapértelmezett nyomtató");
-		}
 		hdc = pd.hDC;
 	}
 	else {
@@ -78,6 +78,8 @@ void nyomtatas(int K, int V, const std::string &Fajta, int EvI, const std::strin
 
 		auto kezdet = K;
 		auto veg = V;
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
 		//Nyomtatas megkezdese, hdc es docifo atadasa
 		if (StartDocW(hdc, &di) > 0) {
@@ -106,13 +108,13 @@ void nyomtatas(int K, int V, const std::string &Fajta, int EvI, const std::strin
 					auto w = 40;
 					auto h = 64;
 					graphics.DrawImage(&image, 0, 0, w, h);
-					std::cout<<std::format("{} {}\n", w, h);
+					std::cout << std::format("{} {}\n", w, h);
 
 					//Milyen stringet irjon ki + koordinatak
 					const wchar_t* MOB = L"MOB";
 					TextOutW(hdc, 600, 50, MOB, static_cast<int>(wcslen(MOB)));
 
-					if (Fajta == "MOB") {
+					if (Fajta == 0) {
 						auto faj = "MOB-" + IntervalumK + '/' + Ev;
 						auto wfaj = to_wchar(faj);
 						TextOutW(hdc, 380, 200, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
@@ -126,7 +128,7 @@ void nyomtatas(int K, int V, const std::string &Fajta, int EvI, const std::strin
 						TextOutW(hdc, 300, 350, erk.get(), static_cast<int>(wcslen(erk.get())));
 					}
 
-					else if (Fajta == "SZLA") {
+					if (Fajta == 1) {
 						F = 1;
 						auto szla = L"SZLA-";
 						TextOutW(hdc, 580, 150, szla, static_cast<int>(wcslen(szla)));
@@ -143,7 +145,7 @@ void nyomtatas(int K, int V, const std::string &Fajta, int EvI, const std::strin
 						TextOutW(hdc, 300, 350, erk.get(), static_cast<int>(wcslen(erk.get())));
 					}
 
-					else if (Fajta == "MOB-DOK") {
+					if (Fajta == 2) {
 						F = 2;
 						auto mobdok = L"MOB-DOK-";
 						TextOutW(hdc, 500, 150, mobdok, static_cast<int>(wcslen(mobdok)));
@@ -160,7 +162,7 @@ void nyomtatas(int K, int V, const std::string &Fajta, int EvI, const std::strin
 						TextOutW(hdc, 300, 350, erk.get(), static_cast<int>(wcslen(erk.get())));
 					}
 
-					else if (Fajta == "SÁVB") {
+					if (Fajta == 3) {
 						F = 3;
 						auto mobdok = L"SÁVB-";
 						TextOutW(hdc, 500, 150, mobdok, static_cast<int>(wcslen(mobdok)));
@@ -177,7 +179,7 @@ void nyomtatas(int K, int V, const std::string &Fajta, int EvI, const std::strin
 						TextOutW(hdc, 300, 350, erk.get(), static_cast<int>(wcslen(erk.get())));
 					}
 
-					else if (Fajta == "MOB-2K-") {
+					if (Fajta == 4) {
 						F = 4;
 						auto mobdok = L"MOB-2K";
 						TextOutW(hdc, 500, 150, mobdok, static_cast<int>(wcslen(mobdok)));
@@ -194,7 +196,7 @@ void nyomtatas(int K, int V, const std::string &Fajta, int EvI, const std::strin
 						TextOutW(hdc, 300, 350, erk.get(), static_cast<int>(wcslen(erk.get())));
 					}
 
-					else if (Fajta == "MOB-BÉR") {
+					if (Fajta == 5) {
 						F = 5;
 						auto mobdok = L"MOB-BÉR-";
 						TextOutW(hdc, 500, 150, mobdok, static_cast<int>(wcslen(mobdok)));
@@ -282,7 +284,7 @@ namespace Project1 {
 				IntervalumK = conf.substr(find_nth_of(conf, 3, '\n') + 1, find_nth_of(conf, 4, '\n') - find_nth_of(conf, 3, '\n') - 1);
 				IntervalumV = conf.substr(find_nth_of(conf, 4, '\n') + 1, find_nth_of(conf, 5, '\n') - find_nth_of(conf, 4, '\n') - 1);
 				Erkezett = conf.substr(find_nth_of(conf, 5, '\n') + 1, find_nth_of(conf, 6, '\n') - find_nth_of(conf, 5, '\n') - 1);
-			}			
+			}
 
 			this->comboBox1->SelectedIndex = std::stoi(Fajta);
 			this->numericUpDown1->Value = std::stoi(Ev);
@@ -341,7 +343,7 @@ namespace Project1 {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+		System::ComponentModel::Container^ components;
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -512,15 +514,16 @@ namespace Project1 {
 			finalPath = msclr::interop::marshal_as<std::string>(saveFileDialog1->FileName);
 		}*/
 
-		auto fajta = comboBox1->SelectedItem->ToString();
-		auto cFajta = msclr::interop::marshal_as<std::string>(fajta);
+		/*auto fajta = comboBox1->SelectedItem->ToString();
+		auto cFajta = msclr::interop::marshal_as<std::string>(fajta);*/
+		auto cFajta = comboBox1->SelectedIndex;
 		auto Ev = System::Decimal::ToInt32(numericUpDown1->Value);
 		auto K = System::Decimal::ToInt32(numericUpDown2->Value);
 		auto V = System::Decimal::ToInt32(numericUpDown3->Value);
 		auto YYYY = dateTimePicker1->Value.Year;
 		auto MM = dateTimePicker1->Value.Month;
 		auto DD = dateTimePicker1->Value.Day;
-		
+
 		std::cout << std::format("Nyomtat gomb lenyomva.\nErtekek: {} {} {} {} {}.{}.{}\n", cFajta, Ev, K, V, YYYY, MM, DD);
 
 		nyomtatas(K, V, cFajta, Ev, std::format("{}.{}.{}", YYYY, MM, DD), 1);
@@ -530,43 +533,44 @@ namespace Project1 {
 
 
 		//nyomtatas(K, V, cFajta,Ev,std::format("{}.{}.{}", YYYY,MM,DD), 1);
-		
+
 		this->Close();
 
 	}
-private: System::Void listBox1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
-}
-private: System::Void numericUpDown1_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
-}
-private: System::Void dateTimePicker1_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
-}
-private: System::Void listView1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
-}
-private: System::Void comboBox1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
-}
-private: System::Void numericUpDown3_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
-}
-private: System::Void dateTimePicker2_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
-}
-private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
-	auto fajta = comboBox1->SelectedItem->ToString();
-	auto cFajta = msclr::interop::marshal_as<std::string>(fajta);
-	auto Ev = System::Decimal::ToInt32(numericUpDown1->Value);
-	auto K = System::Decimal::ToInt32(numericUpDown2->Value);
-	auto V = System::Decimal::ToInt32(numericUpDown3->Value);
-	auto YYYY = dateTimePicker1->Value.Year;
-	auto MM = dateTimePicker1->Value.Month;
-	auto DD = dateTimePicker1->Value.Day;
+	private: System::Void listBox1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
+	}
+	private: System::Void numericUpDown1_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
+	}
+	private: System::Void dateTimePicker1_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
+	}
+	private: System::Void listView1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
+	}
+	private: System::Void comboBox1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
+	}
+	private: System::Void numericUpDown3_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
+	}
+	private: System::Void dateTimePicker2_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
+	}
+	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
+		//auto fajta = comboBox1->SelectedItem->ToString();
+		//auto cFajta = msclr::interop::marshal_as<std::string>(fajta);
+		auto cFajta = comboBox1->SelectedIndex;
+		auto Ev = System::Decimal::ToInt32(numericUpDown1->Value);
+		auto K = System::Decimal::ToInt32(numericUpDown2->Value);
+		auto V = System::Decimal::ToInt32(numericUpDown3->Value);
+		auto YYYY = dateTimePicker1->Value.Year;
+		auto MM = dateTimePicker1->Value.Month;
+		auto DD = dateTimePicker1->Value.Day;
 
-	std::cout << std::format("Nyomtat gomb lenyomva.\nErtekek: {} {} {} {} {}.{}.{}\n", cFajta, Ev, K, V, YYYY, MM, DD);
+		std::cout << std::format("Nyomtat gomb lenyomva.\nErtekek: {} {} {} {} {}.{}.{}\n", cFajta, Ev, K, V, YYYY, MM, DD);
 
-	nyomtatas(K, V, cFajta, Ev, std::format("{}.{}.{}", YYYY, MM, DD), 0);
+		nyomtatas(K, V, cFajta, Ev, std::format("{}.{}.{}", YYYY, MM, DD), 0);
 
-	this->Close();
-}
-private: System::Void textBox1_TextChanged(System::Object^ sender, System::EventArgs^ e) {
-}
-private: System::Void textBox4_TextChanged(System::Object^ sender, System::EventArgs^ e) {
-}
-};
+		this->Close();
+	}
+	private: System::Void textBox1_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+	}
+	private: System::Void textBox4_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+	}
+	};
 }
