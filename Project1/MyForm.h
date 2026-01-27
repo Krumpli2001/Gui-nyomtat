@@ -55,7 +55,7 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 	pd.Flags = PD_RETURNDC;
 
 	// No nyomtató
-	if (!PrintDlgW(&pd)) {
+	if (nyom && !PrintDlgW(&pd)) {
 		std::cout << ("Could not find default printer.\n");
 		System::Windows::Forms::MessageBox::Show("Nem található az alapértelmezett nyomtató");
 	}
@@ -99,26 +99,38 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 				//ezzel "megkezd egy uj papir lapot"
 				if (StartPage(hdc) != 0) {
 
-					HFONT hFont = CreateFontW(50, 0, 0, 0, FW_NORMAL, 0, 0, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, NONANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Arial");
+					HFONT hFont = CreateFontW(30, 0, 0, 0, FW_NORMAL, 0, 0, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, NONANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Arial");
 
 					auto hOldFont = (HFONT)SelectObject(hdc, hFont);
 
 					//a koordinatak elvileg pixelekben vannak
 					//kep nyomtatasa + koordinatak
 					Gdiplus::Graphics graphics(hdc);
-					auto w = 40;
-					auto h = 64;
-					graphics.DrawImage(&image, 0, 0, w, h);
+
+					int dpiX = GetDeviceCaps(hdc, LOGPIXELSX);
+					int dpiY = GetDeviceCaps(hdc, LOGPIXELSY);
+
+					std::cout << std::format("{} {}\n", dpiX, dpiY);
+
+					graphics.Clear(Gdiplus::Color::White);
+					graphics.SetInterpolationMode(Gdiplus::InterpolationModeNearestNeighbor);
+					graphics.SetPixelOffsetMode(Gdiplus::PixelOffsetModeHighQuality);
+					graphics.SetSmoothingMode(Gdiplus::SmoothingModeNone);
+
+					auto w = 10;
+					auto h = 16;
+					graphics.DrawImage(&image, 15, 0, w, h);
 					std::cout << std::format("{} {}\n", w, h);
 
 					//Milyen stringet irjon ki + koordinatak
+					//const wchar_t* MOB = L"123456789223456789323456789423456789523456789623456789723456789";
 					const wchar_t* MOB = L"MOB";
-					TextOutW(hdc, 600, 50, MOB, static_cast<int>(wcslen(MOB)));
+					TextOutW(hdc, 250, 0, MOB, static_cast<int>(wcslen(MOB)));
 
 					if (Fajta == 0) {
 						auto faj = "MOB-" + IntervalumK + '/' + Ev;
 						auto wfaj = to_wchar(faj);
-						TextOutW(hdc, 380, 200, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
+						TextOutW(hdc, 250, 40, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
 						auto e = Erkezett;
 						auto seged = to_wchar(e);
 						auto we = L"Érkezett: ";
@@ -126,7 +138,7 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 						auto erk = std::make_unique<wchar_t[]>(newsize);
 						wcsncat_s(erk.get(), newsize, we, wcslen(we));
 						wcsncat_s(erk.get(), newsize, seged.get(), wcslen(seged.get()));
-						TextOutW(hdc, 300, 350, erk.get(), static_cast<int>(wcslen(erk.get())));
+						TextOutW(hdc, 250, 80, erk.get(), static_cast<int>(wcslen(erk.get())));
 					}
 
 					if (Fajta == 1) {
