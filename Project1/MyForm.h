@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include <iostream>
 #include <format>
@@ -51,7 +51,8 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 	// Nyomtato kivalasztasa (az alapertelmezettre, ha nem akkor meg dobjon ablakot a PDFhez)
 	PRINTDLG pd = { 0 };
 	pd.lStructSize = sizeof(pd);
-	pd.Flags = PD_RETURNDC | PD_RETURNDEFAULT;
+	//pd.Flags = PD_RETURNDC | PD_RETURNDEFAULT;
+	pd.Flags = PD_RETURNDC;
 
 	// No nyomtató
 	if (!PrintDlgW(&pd)) {
@@ -371,9 +372,10 @@ namespace Project1 {
 			// 
 			// button1
 			// 
-			this->button1->Location = System::Drawing::Point(12, 291);
+			this->button1->Location = System::Drawing::Point(16, 358);
+			this->button1->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->button1->Name = L"button1";
-			this->button1->Size = System::Drawing::Size(66, 44);
+			this->button1->Size = System::Drawing::Size(88, 54);
 			this->button1->TabIndex = 0;
 			this->button1->Text = L"Nyomtatás";
 			this->button1->UseVisualStyleBackColor = true;
@@ -381,20 +383,23 @@ namespace Project1 {
 			// 
 			// numericUpDown1
 			// 
-			this->numericUpDown1->Location = System::Drawing::Point(126, 39);
+			this->numericUpDown1->Location = System::Drawing::Point(168, 48);
+			this->numericUpDown1->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->numericUpDown1->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 9999, 0, 0, 0 });
 			this->numericUpDown1->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 1970, 0, 0, 0 });
 			this->numericUpDown1->Name = L"numericUpDown1";
-			this->numericUpDown1->Size = System::Drawing::Size(120, 20);
+			this->numericUpDown1->Size = System::Drawing::Size(160, 22);
 			this->numericUpDown1->TabIndex = 5;
 			this->numericUpDown1->Value = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2026, 0, 0, 0 });
 			this->numericUpDown1->ValueChanged += gcnew System::EventHandler(this, &MyForm::numericUpDown1_ValueChanged);
 			// 
 			// numericUpDown2
 			// 
-			this->numericUpDown2->Location = System::Drawing::Point(126, 109);
+			this->numericUpDown2->Location = System::Drawing::Point(168, 134);
+			this->numericUpDown2->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->numericUpDown2->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 99999, 0, 0, 0 });
 			this->numericUpDown2->Name = L"numericUpDown2";
-			this->numericUpDown2->Size = System::Drawing::Size(120, 20);
+			this->numericUpDown2->Size = System::Drawing::Size(160, 22);
 			this->numericUpDown2->TabIndex = 6;
 			// 
 			// comboBox1
@@ -404,33 +409,38 @@ namespace Project1 {
 				L"MOB", L"SZLA", L"MOB-DOK", L"SÁVB", L"MOB-2K",
 					L"MOB-BÉR"
 			});
-			this->comboBox1->Location = System::Drawing::Point(126, 12);
+			this->comboBox1->Location = System::Drawing::Point(168, 15);
+			this->comboBox1->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->comboBox1->Name = L"comboBox1";
-			this->comboBox1->Size = System::Drawing::Size(121, 21);
+			this->comboBox1->Size = System::Drawing::Size(160, 24);
 			this->comboBox1->TabIndex = 11;
 			this->comboBox1->SelectedIndexChanged += gcnew System::EventHandler(this, &MyForm::comboBox1_SelectedIndexChanged);
 			// 
 			// numericUpDown3
 			// 
-			this->numericUpDown3->Location = System::Drawing::Point(126, 144);
+			this->numericUpDown3->Location = System::Drawing::Point(168, 177);
+			this->numericUpDown3->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->numericUpDown3->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 99999, 0, 0, 0 });
 			this->numericUpDown3->Name = L"numericUpDown3";
-			this->numericUpDown3->Size = System::Drawing::Size(120, 20);
+			this->numericUpDown3->Size = System::Drawing::Size(160, 22);
 			this->numericUpDown3->TabIndex = 12;
 			this->numericUpDown3->ValueChanged += gcnew System::EventHandler(this, &MyForm::numericUpDown3_ValueChanged);
 			// 
 			// dateTimePicker1
 			// 
 			this->dateTimePicker1->Format = System::Windows::Forms::DateTimePickerFormat::Short;
-			this->dateTimePicker1->Location = System::Drawing::Point(126, 221);
+			this->dateTimePicker1->Location = System::Drawing::Point(168, 272);
+			this->dateTimePicker1->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->dateTimePicker1->Name = L"dateTimePicker1";
-			this->dateTimePicker1->Size = System::Drawing::Size(119, 20);
+			this->dateTimePicker1->Size = System::Drawing::Size(157, 22);
 			this->dateTimePicker1->TabIndex = 13;
 			// 
 			// button2
 			// 
-			this->button2->Location = System::Drawing::Point(181, 291);
+			this->button2->Location = System::Drawing::Point(241, 358);
+			this->button2->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->button2->Name = L"button2";
-			this->button2->Size = System::Drawing::Size(66, 44);
+			this->button2->Size = System::Drawing::Size(88, 54);
 			this->button2->TabIndex = 14;
 			this->button2->Text = L"PDF Generálás";
 			this->button2->UseVisualStyleBackColor = true;
@@ -440,9 +450,10 @@ namespace Project1 {
 			// 
 			this->textBox1->BackColor = System::Drawing::SystemColors::Control;
 			this->textBox1->BorderStyle = System::Windows::Forms::BorderStyle::None;
-			this->textBox1->Location = System::Drawing::Point(90, 15);
+			this->textBox1->Location = System::Drawing::Point(120, 18);
+			this->textBox1->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->textBox1->Name = L"textBox1";
-			this->textBox1->Size = System::Drawing::Size(30, 13);
+			this->textBox1->Size = System::Drawing::Size(40, 15);
 			this->textBox1->TabIndex = 15;
 			this->textBox1->Text = L"Fajta:";
 			this->textBox1->TextChanged += gcnew System::EventHandler(this, &MyForm::textBox1_TextChanged);
@@ -451,9 +462,10 @@ namespace Project1 {
 			// 
 			this->textBox2->BackColor = System::Drawing::SystemColors::Control;
 			this->textBox2->BorderStyle = System::Windows::Forms::BorderStyle::None;
-			this->textBox2->Location = System::Drawing::Point(90, 41);
+			this->textBox2->Location = System::Drawing::Point(120, 50);
+			this->textBox2->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->textBox2->Name = L"textBox2";
-			this->textBox2->Size = System::Drawing::Size(25, 13);
+			this->textBox2->Size = System::Drawing::Size(33, 15);
 			this->textBox2->TabIndex = 16;
 			this->textBox2->Text = L"Év:";
 			// 
@@ -461,10 +473,11 @@ namespace Project1 {
 			// 
 			this->textBox3->BackColor = System::Drawing::SystemColors::Control;
 			this->textBox3->BorderStyle = System::Windows::Forms::BorderStyle::None;
-			this->textBox3->Location = System::Drawing::Point(17, 111);
+			this->textBox3->Location = System::Drawing::Point(23, 137);
+			this->textBox3->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->textBox3->Multiline = true;
 			this->textBox3->Name = L"textBox3";
-			this->textBox3->Size = System::Drawing::Size(103, 21);
+			this->textBox3->Size = System::Drawing::Size(137, 26);
 			this->textBox3->TabIndex = 17;
 			this->textBox3->Text = L"Intervalum kezdete:";
 			// 
@@ -472,20 +485,21 @@ namespace Project1 {
 			// 
 			this->textBox4->BackColor = System::Drawing::SystemColors::Control;
 			this->textBox4->BorderStyle = System::Windows::Forms::BorderStyle::None;
-			this->textBox4->Location = System::Drawing::Point(17, 146);
+			this->textBox4->Location = System::Drawing::Point(23, 180);
+			this->textBox4->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->textBox4->Multiline = true;
 			this->textBox4->Name = L"textBox4";
-			this->textBox4->Size = System::Drawing::Size(89, 21);
+			this->textBox4->Size = System::Drawing::Size(119, 26);
 			this->textBox4->TabIndex = 18;
 			this->textBox4->Text = L"Intervalum vége:";
 			this->textBox4->TextChanged += gcnew System::EventHandler(this, &MyForm::textBox4_TextChanged);
 			// 
 			// MyForm
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
+			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::SystemColors::Control;
-			this->ClientSize = System::Drawing::Size(259, 347);
+			this->ClientSize = System::Drawing::Size(345, 427);
 			this->Controls->Add(this->textBox4);
 			this->Controls->Add(this->textBox3);
 			this->Controls->Add(this->textBox2);
@@ -497,6 +511,7 @@ namespace Project1 {
 			this->Controls->Add(this->numericUpDown2);
 			this->Controls->Add(this->numericUpDown1);
 			this->Controls->Add(this->button1);
+			this->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->Name = L"MyForm";
 			this->Text = L"MyForm";
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown1))->EndInit();
