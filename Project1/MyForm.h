@@ -117,23 +117,23 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 					graphics.SetPixelOffsetMode(Gdiplus::PixelOffsetModeHighQuality);
 					graphics.SetSmoothingMode(Gdiplus::SmoothingModeNone);
 
-					auto w = 10;
-					auto h = 16;
-					graphics.DrawImage(&image, 15, 0, w, h);
-					graphics.DrawImage(&image, 30, 0, w, h);
-					graphics.DrawImage(&image, 45, 0, w, h);
+					auto w = 50;
+					auto h = 80;
+					//graphics.DrawImage(&image, 15, 0, w, h);
+					//graphics.DrawImage(&image, 30, 0, w, h);
+					//graphics.DrawImage(&image, 45, 0, w, h);
 					graphics.DrawImage(&image, 60, 0, w, h);
-					graphics.DrawImage(&image, 75, 0, w, h);
-					graphics.DrawImage(&image, 90, 0, w, h);
-					graphics.DrawImage(&image, 105, 0, w, h);
-					graphics.DrawImage(&image, 120, 0, w, h);
-					graphics.DrawImage(&image, 135, 0, w, h);
+					//graphics.DrawImage(&image, 75, 0, w, h);
+					//graphics.DrawImage(&image, 90, 0, w, h);
+					//graphics.DrawImage(&image, 105, 0, w, h);
+					//graphics.DrawImage(&image, 120, 0, w, h);
+					//graphics.DrawImage(&image, 135, 0, w, h);
 
 					std::cout << std::format("{} {}\n", w, h);
 
 					//Milyen stringet irjon ki + koordinatak
-					const wchar_t* MOB = L"123456789223456789323456789423456789523456789623456789723456789";
-					//const wchar_t* MOB = L"MOB";
+					//const wchar_t* MOB = L"123456789223456789323456789423456789523456789623456789723456789";
+					const wchar_t* MOB = L"MOB";
 					TextOutW(hdc, 250, 0, MOB, static_cast<int>(wcslen(MOB)));
 
 					if (Fajta == 0) {
