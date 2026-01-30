@@ -107,27 +107,24 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 					//kep nyomtatasa + koordinatak
 					Gdiplus::Graphics graphics(hdc);
 
-					int dpiX = GetDeviceCaps(hdc, LOGPIXELSX);
-					int dpiY = GetDeviceCaps(hdc, LOGPIXELSY);
-
-					std::cout << std::format("{} {}\n", dpiX, dpiY);
-
 					graphics.Clear(Gdiplus::Color::White);
 					graphics.SetInterpolationMode(Gdiplus::InterpolationModeNearestNeighbor);
 					graphics.SetPixelOffsetMode(Gdiplus::PixelOffsetModeHighQuality);
 					graphics.SetSmoothingMode(Gdiplus::SmoothingModeNone);
 
-					auto w = 50;
-					auto h = 80;
-					//graphics.DrawImage(&image, 15, 0, w, h);
-					//graphics.DrawImage(&image, 30, 0, w, h);
-					//graphics.DrawImage(&image, 45, 0, w, h);
-					graphics.DrawImage(&image, 60, 0, w, h);
-					//graphics.DrawImage(&image, 75, 0, w, h);
-					//graphics.DrawImage(&image, 90, 0, w, h);
-					//graphics.DrawImage(&image, 105, 0, w, h);
-					//graphics.DrawImage(&image, 120, 0, w, h);
-					//graphics.DrawImage(&image, 135, 0, w, h);
+					auto w = 20;
+					auto h = 32;
+
+					if (image.GetLastStatus() == Gdiplus::Ok) {
+						if (nyom) {
+							w = 50;
+							h = 80;
+							graphics.DrawImage(&image, 60, 0, w, h);
+						}
+						else {
+							graphics.DrawImage(&image, 15, 0, w, h);
+						}
+					}
 
 					std::cout << std::format("{} {}\n", w, h);
 
@@ -147,16 +144,16 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 						auto erk = std::make_unique<wchar_t[]>(newsize);
 						wcsncat_s(erk.get(), newsize, we, wcslen(we));
 						wcsncat_s(erk.get(), newsize, seged.get(), wcslen(seged.get()));
-						TextOutW(hdc, 250, 80, erk.get(), static_cast<int>(wcslen(erk.get())));
+						TextOutW(hdc, 250, 160, erk.get(), static_cast<int>(wcslen(erk.get())));
 					}
 
 					if (Fajta == 1) {
 						F = 1;
 						auto szla = L"SZLA-";
-						TextOutW(hdc, 250, 30, szla, static_cast<int>(wcslen(szla)));
+						TextOutW(hdc, 250, 50, szla, static_cast<int>(wcslen(szla)));
 						auto faj = IntervalumK + '/' + Ev;
 						auto wfaj = to_wchar(faj);
-						TextOutW(hdc, 250, 55, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
+						TextOutW(hdc, 250, 100, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
 						auto e = Erkezett;
 						auto seged = to_wchar(e);
 						auto we = L"Érkezett: ";
@@ -164,16 +161,16 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 						auto erk = std::make_unique<wchar_t[]>(newsize);
 						wcsncat_s(erk.get(), newsize, we, wcslen(we));
 						wcsncat_s(erk.get(), newsize, seged.get(), wcslen(seged.get()));
-						TextOutW(hdc, 250, 80, erk.get(), static_cast<int>(wcslen(erk.get())));
+						TextOutW(hdc, 250, 150, erk.get(), static_cast<int>(wcslen(erk.get())));
 					}
 
 					if (Fajta == 2) {
 						F = 2;
 						auto mobdok = L"MOB-DOK-";
-						TextOutW(hdc, 250, 30, mobdok, static_cast<int>(wcslen(mobdok)));
+						TextOutW(hdc, 250, 50, mobdok, static_cast<int>(wcslen(mobdok)));
 						auto faj = IntervalumK + '/' + Ev;
 						auto wfaj = to_wchar(faj);
-						TextOutW(hdc, 250, 55, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
+						TextOutW(hdc, 250, 100, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
 						auto e = Erkezett;
 						auto seged = to_wchar(e);
 						auto we = L"Érkezett: ";
@@ -181,16 +178,16 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 						auto erk = std::make_unique<wchar_t[]>(newsize);
 						wcsncat_s(erk.get(), newsize, we, wcslen(we));
 						wcsncat_s(erk.get(), newsize, seged.get(), wcslen(seged.get()));
-						TextOutW(hdc, 250, 80, erk.get(), static_cast<int>(wcslen(erk.get())));
+						TextOutW(hdc, 250, 150, erk.get(), static_cast<int>(wcslen(erk.get())));
 					}
 
 					if (Fajta == 3) {
 						F = 3;
 						auto mobdok = L"SÁVB-";
-						TextOutW(hdc, 250, 30, mobdok, static_cast<int>(wcslen(mobdok)));
+						TextOutW(hdc, 250, 50, mobdok, static_cast<int>(wcslen(mobdok)));
 						auto faj = IntervalumK + '/' + Ev;
 						auto wfaj = to_wchar(faj);
-						TextOutW(hdc, 250, 55, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
+						TextOutW(hdc, 250, 100, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
 						auto e = Erkezett;
 						auto seged = to_wchar(e);
 						auto we = L"Érkezett: ";
@@ -198,16 +195,16 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 						auto erk = std::make_unique<wchar_t[]>(newsize);
 						wcsncat_s(erk.get(), newsize, we, wcslen(we));
 						wcsncat_s(erk.get(), newsize, seged.get(), wcslen(seged.get()));
-						TextOutW(hdc, 250, 80, erk.get(), static_cast<int>(wcslen(erk.get())));
+						TextOutW(hdc, 250, 150, erk.get(), static_cast<int>(wcslen(erk.get())));
 					}
 
 					if (Fajta == 4) {
 						F = 4;
 						auto mobdok = L"MOB-2K";
-						TextOutW(hdc, 250, 30, mobdok, static_cast<int>(wcslen(mobdok)));
+						TextOutW(hdc, 250, 50, mobdok, static_cast<int>(wcslen(mobdok)));
 						auto faj = IntervalumK + '/' + Ev;
 						auto wfaj = to_wchar(faj);
-						TextOutW(hdc, 250, 55, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
+						TextOutW(hdc, 250, 100, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
 						auto e = Erkezett;
 						auto seged = to_wchar(e);
 						auto we = L"Érkezett: ";
@@ -215,16 +212,16 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 						auto erk = std::make_unique<wchar_t[]>(newsize);
 						wcsncat_s(erk.get(), newsize, we, wcslen(we));
 						wcsncat_s(erk.get(), newsize, seged.get(), wcslen(seged.get()));
-						TextOutW(hdc, 250, 80, erk.get(), static_cast<int>(wcslen(erk.get())));
+						TextOutW(hdc, 250, 150, erk.get(), static_cast<int>(wcslen(erk.get())));
 					}
 
 					if (Fajta == 5) {
 						F = 5;
 						auto mobdok = L"MOB-BÉR-";
-						TextOutW(hdc, 250, 30, mobdok, static_cast<int>(wcslen(mobdok)));
+						TextOutW(hdc, 250, 50, mobdok, static_cast<int>(wcslen(mobdok)));
 						auto faj = IntervalumK + '/' + Ev;
 						auto wfaj = to_wchar(faj);
-						TextOutW(hdc, 250, 55, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
+						TextOutW(hdc, 250, 100, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
 						auto e = Erkezett;
 						auto seged = to_wchar(e);
 						auto we = L"Érkezett: ";
@@ -232,7 +229,7 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 						auto erk = std::make_unique<wchar_t[]>(newsize);
 						wcsncat_s(erk.get(), newsize, we, wcslen(we));
 						wcsncat_s(erk.get(), newsize, seged.get(), wcslen(seged.get()));
-						TextOutW(hdc, 250, 80, erk.get(), static_cast<int>(wcslen(erk.get())));
+						TextOutW(hdc, 250, 150, erk.get(), static_cast<int>(wcslen(erk.get())));
 					}
 
 					SelectObject(hdc, hOldFont);
