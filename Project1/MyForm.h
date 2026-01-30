@@ -136,7 +136,7 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 					if (Fajta == 0) {
 						auto faj = "MOB-" + IntervalumK + '/' + Ev;
 						auto wfaj = to_wchar(faj);
-						TextOutW(hdc, 250, 40, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
+						TextOutW(hdc, 250, 70, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
 						auto e = Erkezett;
 						auto seged = to_wchar(e);
 						auto we = L"Érkezett: ";
@@ -144,7 +144,7 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 						auto erk = std::make_unique<wchar_t[]>(newsize);
 						wcsncat_s(erk.get(), newsize, we, wcslen(we));
 						wcsncat_s(erk.get(), newsize, seged.get(), wcslen(seged.get()));
-						TextOutW(hdc, 250, 160, erk.get(), static_cast<int>(wcslen(erk.get())));
+						TextOutW(hdc, 250, 150, erk.get(), static_cast<int>(wcslen(erk.get())));
 					}
 
 					if (Fajta == 1) {
