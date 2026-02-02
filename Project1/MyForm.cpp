@@ -1,10 +1,12 @@
-﻿#include "MyForm.h"
+#include "MyForm.h"
 
 //using namespace System;
 //using namespace System::Windows::Forms;
 
 [System::STAThreadAttribute]
 int main() {
+
+	std::cout << std::format("Ide beléptem waze!");
 
 	System::Windows::Forms::Application::EnableVisualStyles();
 	System::Windows::Forms::Application::SetCompatibleTextRenderingDefault(false);

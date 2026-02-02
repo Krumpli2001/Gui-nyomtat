@@ -566,10 +566,10 @@ namespace Project1 {
 			// 
 			this->textBox5->BackColor = System::Drawing::SystemColors::Control;
 			this->textBox5->BorderStyle = System::Windows::Forms::BorderStyle::None;
-			this->textBox5->Location = System::Drawing::Point(51, 240);
+			this->textBox5->Location = System::Drawing::Point(39, 240);
 			this->textBox5->Margin = System::Windows::Forms::Padding(4);
 			this->textBox5->Name = L"textBox5";
-			this->textBox5->Size = System::Drawing::Size(102, 15);
+			this->textBox5->Size = System::Drawing::Size(114, 15);
 			this->textBox5->TabIndex = 20;
 			this->textBox5->Text = L"Érkezett/Kikülve:";
 			this->textBox5->TextChanged += gcnew System::EventHandler(this, &MyForm::textBox5_TextChanged);
@@ -594,8 +594,8 @@ namespace Project1 {
 			this->Controls->Add(this->numericUpDown1);
 			this->Controls->Add(this->button1);
 			this->Margin = System::Windows::Forms::Padding(4);
-			this->Name = L"MyForm";
-			this->Text = L"MyForm";
+			this->Name = L"MOB Címke";
+			this->Text = L"MOB Címke";
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown1))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown2))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown3))->EndInit();
