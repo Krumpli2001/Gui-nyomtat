@@ -100,7 +100,7 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 				if (StartPage(hdc) != 0) {
 
 					HFONT hFont = CreateFontW(30, 0, 0, 0, FW_NORMAL, 0, 0, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, NONANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Arial");
-					HFONT hBoldFont = CreateFontW(30, 0, 0, 0, FW_BOLD, 0, 0, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, NONANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Arial");
+					HFONT hBoldFont = CreateFontW(50, 0, 0, 0, FW_BOLD, 0, 0, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, NONANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Arial");
 
 					auto hOldFont = (HFONT)SelectObject(hdc, hFont);
 					DeleteObject(hOldFont);
@@ -137,7 +137,7 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 					auto MOBy = 165;
 
 					if (nyom) {
-						MOBx = 140;
+						MOBx = 143;
 					}
 
 					const wchar_t* MOB = L"MOB";
@@ -145,9 +145,11 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 
 					if (Fajta == 0) {
 						SelectObject(hdc, hBoldFont);
-						auto faj = "MOB-" + IntervalumK + '/' + Ev;
+						auto mob = L"MOB-";
+						TextOutW(hdc, 300, 50, mob, static_cast<int>(wcslen(mob)));
+						auto faj = IntervalumK + '/' + Ev;
 						auto wfaj = to_wchar(faj);
-						TextOutW(hdc, 250, 70, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
+						TextOutW(hdc, 255, 100, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
 						SelectObject(hdc, hFont);
 						auto e = Erkezett;
 						auto seged = to_wchar(e);
@@ -163,10 +165,10 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 						SelectObject(hdc, hBoldFont);
 						F = 1;
 						auto szla = L"SZLA-";
-						TextOutW(hdc, 250, 50, szla, static_cast<int>(wcslen(szla)));
+						TextOutW(hdc, 300, 50, szla, static_cast<int>(wcslen(szla)));
 						auto faj = IntervalumK + '/' + Ev;
 						auto wfaj = to_wchar(faj);
-						TextOutW(hdc, 250, 100, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
+						TextOutW(hdc, 255, 100, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
 						SelectObject(hdc, hFont);
 						auto e = Erkezett;
 						auto seged = to_wchar(e);
@@ -182,10 +184,10 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 						SelectObject(hdc, hBoldFont);
 						F = 2;
 						auto mobdok = L"MOB-DOK-";
-						TextOutW(hdc, 250, 50, mobdok, static_cast<int>(wcslen(mobdok)));
+						TextOutW(hdc, 255, 50, mobdok, static_cast<int>(wcslen(mobdok)));
 						auto faj = IntervalumK + '/' + Ev;
 						auto wfaj = to_wchar(faj);
-						TextOutW(hdc, 250, 100, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
+						TextOutW(hdc, 255, 100, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
 						SelectObject(hdc, hFont);
 						auto e = Erkezett;
 						auto seged = to_wchar(e);
@@ -201,10 +203,10 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 						SelectObject(hdc, hBoldFont);
 						F = 3;
 						auto mobdok = L"SÁVB-";
-						TextOutW(hdc, 250, 50, mobdok, static_cast<int>(wcslen(mobdok)));
+						TextOutW(hdc, 300, 50, mobdok, static_cast<int>(wcslen(mobdok)));
 						auto faj = IntervalumK + '/' + Ev;
 						auto wfaj = to_wchar(faj);
-						TextOutW(hdc, 250, 100, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
+						TextOutW(hdc, 255, 100, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
 						SelectObject(hdc, hFont);
 						auto e = Erkezett;
 						auto seged = to_wchar(e);
@@ -219,11 +221,11 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 					if (Fajta == 4) {
 						SelectObject(hdc, hBoldFont);
 						F = 4;
-						auto mobdok = L"MOB-2K";
-						TextOutW(hdc, 250, 50, mobdok, static_cast<int>(wcslen(mobdok)));
+						auto mobdok = L"MOB-2K-";
+						TextOutW(hdc, 280, 50, mobdok, static_cast<int>(wcslen(mobdok)));
 						auto faj = IntervalumK + '/' + Ev;
 						auto wfaj = to_wchar(faj);
-						TextOutW(hdc, 250, 100, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
+						TextOutW(hdc, 255, 100, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
 						SelectObject(hdc, hFont);
 						auto e = Erkezett;
 						auto seged = to_wchar(e);
@@ -239,10 +241,10 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 						SelectObject(hdc, hBoldFont);
 						F = 5;
 						auto mobdok = L"MOB-BÉR-";
-						TextOutW(hdc, 250, 50, mobdok, static_cast<int>(wcslen(mobdok)));
+						TextOutW(hdc, 260, 50, mobdok, static_cast<int>(wcslen(mobdok)));
 						auto faj = IntervalumK + '/' + Ev;
 						auto wfaj = to_wchar(faj);
-						TextOutW(hdc, 250, 100, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
+						TextOutW(hdc, 255, 100, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
 						SelectObject(hdc, hFont);
 						auto e = Erkezett;
 						auto seged = to_wchar(e);
