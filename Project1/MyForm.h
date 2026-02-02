@@ -133,8 +133,15 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 					//Milyen stringet irjon ki + koordinatak
 					//const wchar_t* MOB = L"123456789223456789323456789423456789523456789623456789723456789";
 
+					auto MOBx = 110;
+					auto MOBy = 165;
+
+					if (nyom) {
+						MOBx = 140;
+					}
+
 					const wchar_t* MOB = L"MOB";
-					TextOutW(hdc, 110, 165, MOB, static_cast<int>(wcslen(MOB)));
+					TextOutW(hdc, MOBx, MOBy, MOB, static_cast<int>(wcslen(MOB)));
 
 					if (Fajta == 0) {
 						SelectObject(hdc, hBoldFont);
