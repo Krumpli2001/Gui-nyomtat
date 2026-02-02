@@ -100,8 +100,10 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 				if (StartPage(hdc) != 0) {
 
 					HFONT hFont = CreateFontW(30, 0, 0, 0, FW_NORMAL, 0, 0, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, NONANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Arial");
+					HFONT hBoldFont = CreateFontW(30, 0, 0, 0, FW_BOLD, 0, 0, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, NONANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Arial");
 
 					auto hOldFont = (HFONT)SelectObject(hdc, hFont);
+					DeleteObject(hOldFont);
 
 					//a koordinatak elvileg pixelekben vannak
 					//kep nyomtatasa + koordinatak
@@ -112,8 +114,8 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 					graphics.SetPixelOffsetMode(Gdiplus::PixelOffsetModeHighQuality);
 					graphics.SetSmoothingMode(Gdiplus::SmoothingModeNone);
 
-					auto w = 20;
-					auto h = 32;
+					auto w = 16;
+					auto h = 26;
 
 					if (image.GetLastStatus() == Gdiplus::Ok) {
 						if (nyom) {
@@ -130,13 +132,16 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 
 					//Milyen stringet irjon ki + koordinatak
 					//const wchar_t* MOB = L"123456789223456789323456789423456789523456789623456789723456789";
+
 					const wchar_t* MOB = L"MOB";
-					TextOutW(hdc, 250, 0, MOB, static_cast<int>(wcslen(MOB)));
+					TextOutW(hdc, 110, 165, MOB, static_cast<int>(wcslen(MOB)));
 
 					if (Fajta == 0) {
+						SelectObject(hdc, hBoldFont);
 						auto faj = "MOB-" + IntervalumK + '/' + Ev;
 						auto wfaj = to_wchar(faj);
 						TextOutW(hdc, 250, 70, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
+						SelectObject(hdc, hFont);
 						auto e = Erkezett;
 						auto seged = to_wchar(e);
 						auto we = L"Érkezett: ";
@@ -148,12 +153,14 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 					}
 
 					if (Fajta == 1) {
+						SelectObject(hdc, hBoldFont);
 						F = 1;
 						auto szla = L"SZLA-";
 						TextOutW(hdc, 250, 50, szla, static_cast<int>(wcslen(szla)));
 						auto faj = IntervalumK + '/' + Ev;
 						auto wfaj = to_wchar(faj);
 						TextOutW(hdc, 250, 100, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
+						SelectObject(hdc, hFont);
 						auto e = Erkezett;
 						auto seged = to_wchar(e);
 						auto we = L"Érkezett: ";
@@ -165,12 +172,14 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 					}
 
 					if (Fajta == 2) {
+						SelectObject(hdc, hBoldFont);
 						F = 2;
 						auto mobdok = L"MOB-DOK-";
 						TextOutW(hdc, 250, 50, mobdok, static_cast<int>(wcslen(mobdok)));
 						auto faj = IntervalumK + '/' + Ev;
 						auto wfaj = to_wchar(faj);
 						TextOutW(hdc, 250, 100, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
+						SelectObject(hdc, hFont);
 						auto e = Erkezett;
 						auto seged = to_wchar(e);
 						auto we = L"Érkezett: ";
@@ -182,12 +191,14 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 					}
 
 					if (Fajta == 3) {
+						SelectObject(hdc, hBoldFont);
 						F = 3;
 						auto mobdok = L"SÁVB-";
 						TextOutW(hdc, 250, 50, mobdok, static_cast<int>(wcslen(mobdok)));
 						auto faj = IntervalumK + '/' + Ev;
 						auto wfaj = to_wchar(faj);
 						TextOutW(hdc, 250, 100, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
+						SelectObject(hdc, hFont);
 						auto e = Erkezett;
 						auto seged = to_wchar(e);
 						auto we = L"Érkezett: ";
@@ -199,12 +210,14 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 					}
 
 					if (Fajta == 4) {
+						SelectObject(hdc, hBoldFont);
 						F = 4;
 						auto mobdok = L"MOB-2K";
 						TextOutW(hdc, 250, 50, mobdok, static_cast<int>(wcslen(mobdok)));
 						auto faj = IntervalumK + '/' + Ev;
 						auto wfaj = to_wchar(faj);
 						TextOutW(hdc, 250, 100, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
+						SelectObject(hdc, hFont);
 						auto e = Erkezett;
 						auto seged = to_wchar(e);
 						auto we = L"Érkezett: ";
@@ -216,12 +229,14 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 					}
 
 					if (Fajta == 5) {
+						SelectObject(hdc, hBoldFont);
 						F = 5;
 						auto mobdok = L"MOB-BÉR-";
 						TextOutW(hdc, 250, 50, mobdok, static_cast<int>(wcslen(mobdok)));
 						auto faj = IntervalumK + '/' + Ev;
 						auto wfaj = to_wchar(faj);
 						TextOutW(hdc, 250, 100, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
+						SelectObject(hdc, hFont);
 						auto e = Erkezett;
 						auto seged = to_wchar(e);
 						auto we = L"Érkezett: ";
@@ -232,8 +247,9 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 						TextOutW(hdc, 250, 150, erk.get(), static_cast<int>(wcslen(erk.get())));
 					}
 
-					SelectObject(hdc, hOldFont);
-					DeleteObject(hFont);
+					//SelectObject(hdc, hOldFont);
+					//DeleteObject(hFont);
+					DeleteObject(hBoldFont);
 
 					EndPage(hdc);
 				}
@@ -559,7 +575,17 @@ namespace Project1 {
 
 		std::cout << std::format("Nyomtat gomb lenyomva.\nErtekek: {} {} {} {} {}.{}.{}\n", cFajta, Ev, K, V, YYYY, MM, DD);
 
-		nyomtatas(K, V, cFajta, Ev, std::format("{}.{}.{}", YYYY, MM, DD), 1);
+		auto honap = std::to_string(MM);
+		auto nap = std::to_string(DD);
+
+		if (MM < 10) {
+			honap = std::format("0{}", honap);
+		}
+		if (DD < 10) {
+			nap = std::format("0{}", nap);
+		}
+
+		nyomtatas(K, V, cFajta, Ev, std::format("{}.{}.{}", YYYY, honap, nap), 1);
 
 		/*std::jthread t(nyomtatas, K, V, cFajta, Ev, std::format("{}.{}.{}", YYYY, MM, DD), 1);
 		t.detach();*/
@@ -596,6 +622,16 @@ namespace Project1 {
 		auto DD = dateTimePicker1->Value.Day;
 
 		std::cout << std::format("Nyomtat gomb lenyomva.\nErtekek: {} {} {} {} {}.{}.{}\n", cFajta, Ev, K, V, YYYY, MM, DD);
+
+		auto honap = std::to_string(MM);
+		auto nap = std::to_string(DD);
+
+		if (MM < 10) {
+			honap = std::format("0{}", honap);
+		}
+		if (DD < 10) {
+			nap = std::format("0{}", nap);
+		}
 
 		nyomtatas(K, V, cFajta, Ev, std::format("{}.{}.{}", YYYY, MM, DD), 0);
 
