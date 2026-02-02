@@ -633,7 +633,7 @@ namespace Project1 {
 			nap = std::format("0{}", nap);
 		}
 
-		nyomtatas(K, V, cFajta, Ev, std::format("{}.{}.{}", YYYY, MM, DD), 0);
+		nyomtatas(K, V, cFajta, Ev, std::format("{}.{}.{}", YYYY, honap, nap), 0);
 
 		this->Close();
 	}
