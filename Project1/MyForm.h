@@ -28,11 +28,11 @@ int find_nth_of(const std::string& str, const int n, const char ch) {
 	return -1;
 }
 
-void fajlba_iras(int Fajta, int Ev, int IntervalumK, int IntervalumV, const std::string& Erkezett) {
+void fajlba_iras(int Fajta, int Ev, int IntervalumK, int IntervalumV, const std::string& Erkezett, int BeKi) {
 	std::ofstream o("settings.txt");
 	auto port = "Manualisan ne ird felul - SA";
 	if (o.is_open()) {
-		o << port << '\n' << Fajta << '\n' << Ev << '\n' << IntervalumK << '\n' << IntervalumV << '\n' << Erkezett << '\n';
+		o << port << '\n' << Fajta << '\n' << Ev << '\n' << IntervalumK << '\n' << IntervalumV << '\n' << Erkezett << '\n' << BeKi<<'\n';
 		o.close();
 	}
 }
@@ -45,7 +45,7 @@ auto to_wchar(const std::string& str) {
 	return wcstring;
 }
 
-void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, int nyom) {
+void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, int nyom, int BeKi) {
 	auto Ev = std::to_string(EvI);
 	auto F = 0;
 	// Nyomtato kivalasztasa (az alapertelmezettre, ha nem akkor meg dobjon ablakot a PDFhez)
@@ -143,17 +143,22 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 					const wchar_t* MOB = L"MOB";
 					TextOutW(hdc, MOBx, MOBy, MOB, static_cast<int>(wcslen(MOB)));
 
+					auto we = L"Érkezett: ";
+					if (BeKi) {
+						we = L"Kiküldve: ";
+					}
+
 					if (Fajta == 0) {
 						SelectObject(hdc, hBoldFont);
 						auto mob = L"MOB-";
-						TextOutW(hdc, 300, 50, mob, static_cast<int>(wcslen(mob)));
+						TextOutW(hdc, 315, 20, mob, static_cast<int>(wcslen(mob)));
 						auto faj = IntervalumK + '/' + Ev;
 						auto wfaj = to_wchar(faj);
-						TextOutW(hdc, 255, 100, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
+						TextOutW(hdc, 255, 80, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
 						SelectObject(hdc, hFont);
 						auto e = Erkezett;
 						auto seged = to_wchar(e);
-						auto we = L"Érkezett: ";
+						//auto we = L"Érkezett: ";
 						auto newsize = wcslen(we) + wcslen(seged.get()) + 1;
 						auto erk = std::make_unique<wchar_t[]>(newsize);
 						wcsncat_s(erk.get(), newsize, we, wcslen(we));
@@ -165,14 +170,14 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 						SelectObject(hdc, hBoldFont);
 						F = 1;
 						auto szla = L"SZLA-";
-						TextOutW(hdc, 300, 50, szla, static_cast<int>(wcslen(szla)));
+						TextOutW(hdc, 300, 20, szla, static_cast<int>(wcslen(szla)));
 						auto faj = IntervalumK + '/' + Ev;
 						auto wfaj = to_wchar(faj);
-						TextOutW(hdc, 255, 100, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
+						TextOutW(hdc, 255, 80, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
 						SelectObject(hdc, hFont);
 						auto e = Erkezett;
 						auto seged = to_wchar(e);
-						auto we = L"Érkezett: ";
+						//auto we = L"Érkezett: ";
 						auto newsize = wcslen(we) + wcslen(seged.get()) + 1;
 						auto erk = std::make_unique<wchar_t[]>(newsize);
 						wcsncat_s(erk.get(), newsize, we, wcslen(we));
@@ -184,14 +189,14 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 						SelectObject(hdc, hBoldFont);
 						F = 2;
 						auto mobdok = L"MOB-DOK-";
-						TextOutW(hdc, 255, 50, mobdok, static_cast<int>(wcslen(mobdok)));
+						TextOutW(hdc, 255, 20, mobdok, static_cast<int>(wcslen(mobdok)));
 						auto faj = IntervalumK + '/' + Ev;
 						auto wfaj = to_wchar(faj);
-						TextOutW(hdc, 255, 100, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
+						TextOutW(hdc, 255, 80, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
 						SelectObject(hdc, hFont);
 						auto e = Erkezett;
 						auto seged = to_wchar(e);
-						auto we = L"Érkezett: ";
+						//auto we = L"Érkezett: ";
 						auto newsize = wcslen(we) + wcslen(seged.get()) + 1;
 						auto erk = std::make_unique<wchar_t[]>(newsize);
 						wcsncat_s(erk.get(), newsize, we, wcslen(we));
@@ -203,14 +208,14 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 						SelectObject(hdc, hBoldFont);
 						F = 3;
 						auto mobdok = L"SÁVB-";
-						TextOutW(hdc, 300, 50, mobdok, static_cast<int>(wcslen(mobdok)));
+						TextOutW(hdc, 300, 20, mobdok, static_cast<int>(wcslen(mobdok)));
 						auto faj = IntervalumK + '/' + Ev;
 						auto wfaj = to_wchar(faj);
-						TextOutW(hdc, 255, 100, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
+						TextOutW(hdc, 255, 80, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
 						SelectObject(hdc, hFont);
 						auto e = Erkezett;
 						auto seged = to_wchar(e);
-						auto we = L"Érkezett: ";
+						//auto we = L"Érkezett: ";
 						auto newsize = wcslen(we) + wcslen(seged.get()) + 1;
 						auto erk = std::make_unique<wchar_t[]>(newsize);
 						wcsncat_s(erk.get(), newsize, we, wcslen(we));
@@ -222,14 +227,14 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 						SelectObject(hdc, hBoldFont);
 						F = 4;
 						auto mobdok = L"MOB-2K-";
-						TextOutW(hdc, 280, 50, mobdok, static_cast<int>(wcslen(mobdok)));
+						TextOutW(hdc, 280, 20, mobdok, static_cast<int>(wcslen(mobdok)));
 						auto faj = IntervalumK + '/' + Ev;
 						auto wfaj = to_wchar(faj);
-						TextOutW(hdc, 255, 100, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
+						TextOutW(hdc, 255, 80, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
 						SelectObject(hdc, hFont);
 						auto e = Erkezett;
 						auto seged = to_wchar(e);
-						auto we = L"Érkezett: ";
+						//auto we = L"Érkezett: ";
 						auto newsize = wcslen(we) + wcslen(seged.get()) + 1;
 						auto erk = std::make_unique<wchar_t[]>(newsize);
 						wcsncat_s(erk.get(), newsize, we, wcslen(we));
@@ -241,14 +246,14 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 						SelectObject(hdc, hBoldFont);
 						F = 5;
 						auto mobdok = L"MOB-BÉR-";
-						TextOutW(hdc, 260, 50, mobdok, static_cast<int>(wcslen(mobdok)));
+						TextOutW(hdc, 260, 20, mobdok, static_cast<int>(wcslen(mobdok)));
 						auto faj = IntervalumK + '/' + Ev;
 						auto wfaj = to_wchar(faj);
-						TextOutW(hdc, 255, 100, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
+						TextOutW(hdc, 255, 80, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
 						SelectObject(hdc, hFont);
 						auto e = Erkezett;
 						auto seged = to_wchar(e);
-						auto we = L"Érkezett: ";
+						//auto we = L"Érkezett: ";
 						auto newsize = wcslen(we) + wcslen(seged.get()) + 1;
 						auto erk = std::make_unique<wchar_t[]>(newsize);
 						wcsncat_s(erk.get(), newsize, we, wcslen(we));
@@ -281,7 +286,7 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 
 	//if(Fajta=="MOB")
 
-	fajlba_iras(F, EvI, K, V, Erkezett);
+	fajlba_iras(F, EvI, K, V, Erkezett, BeKi);
 }
 
 namespace Project1 {
@@ -312,6 +317,7 @@ namespace Project1 {
 			auto IntervalumK = std::string("0");
 			auto IntervalumV = std::string("0");
 			auto Erkezett = std::string("2026.1.22");
+			auto BeKi = std::string("0");
 
 			std::string line;
 			std::string conf;
@@ -328,6 +334,7 @@ namespace Project1 {
 				IntervalumK = conf.substr(find_nth_of(conf, 3, '\n') + 1, find_nth_of(conf, 4, '\n') - find_nth_of(conf, 3, '\n') - 1);
 				IntervalumV = conf.substr(find_nth_of(conf, 4, '\n') + 1, find_nth_of(conf, 5, '\n') - find_nth_of(conf, 4, '\n') - 1);
 				Erkezett = conf.substr(find_nth_of(conf, 5, '\n') + 1, find_nth_of(conf, 6, '\n') - find_nth_of(conf, 5, '\n') - 1);
+				BeKi = conf.substr(find_nth_of(conf, 6, '\n') + 1, find_nth_of(conf, 7, '\n') - find_nth_of(conf, 6, '\n') - 1);
 			}
 
 			this->comboBox1->SelectedIndex = std::stoi(Fajta);
@@ -335,6 +342,8 @@ namespace Project1 {
 
 			this->numericUpDown2->Value = std::stoi(IntervalumK);
 			this->numericUpDown3->Value = std::stoi(IntervalumV);
+
+			this->comboBox2->SelectedIndex = std::stoi(BeKi);
 
 			//kep nyomtatas inicializalasa 15*240
 			Gdiplus::GdiplusStartupInput gdiplusStartupInput;
@@ -380,6 +389,10 @@ namespace Project1 {
 	private: System::Windows::Forms::TextBox^ textBox3;
 	private: System::Windows::Forms::TextBox^ textBox4;
 	private: System::Windows::Forms::SaveFileDialog^ saveFileDialog1;
+	public: System::Windows::Forms::ComboBox^ comboBox2;
+	private:
+	private: System::Windows::Forms::TextBox^ textBox5;
+	public:
 
 	protected:
 
@@ -408,6 +421,8 @@ namespace Project1 {
 			this->textBox3 = (gcnew System::Windows::Forms::TextBox());
 			this->textBox4 = (gcnew System::Windows::Forms::TextBox());
 			this->saveFileDialog1 = (gcnew System::Windows::Forms::SaveFileDialog());
+			this->comboBox2 = (gcnew System::Windows::Forms::ComboBox());
+			this->textBox5 = (gcnew System::Windows::Forms::TextBox());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown2))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown3))->BeginInit();
@@ -416,7 +431,7 @@ namespace Project1 {
 			// button1
 			// 
 			this->button1->Location = System::Drawing::Point(16, 358);
-			this->button1->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->button1->Margin = System::Windows::Forms::Padding(4);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(88, 54);
 			this->button1->TabIndex = 0;
@@ -427,7 +442,7 @@ namespace Project1 {
 			// numericUpDown1
 			// 
 			this->numericUpDown1->Location = System::Drawing::Point(168, 48);
-			this->numericUpDown1->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->numericUpDown1->Margin = System::Windows::Forms::Padding(4);
 			this->numericUpDown1->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 9999, 0, 0, 0 });
 			this->numericUpDown1->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 1970, 0, 0, 0 });
 			this->numericUpDown1->Name = L"numericUpDown1";
@@ -439,7 +454,7 @@ namespace Project1 {
 			// numericUpDown2
 			// 
 			this->numericUpDown2->Location = System::Drawing::Point(168, 134);
-			this->numericUpDown2->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->numericUpDown2->Margin = System::Windows::Forms::Padding(4);
 			this->numericUpDown2->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 99999, 0, 0, 0 });
 			this->numericUpDown2->Name = L"numericUpDown2";
 			this->numericUpDown2->Size = System::Drawing::Size(160, 22);
@@ -453,7 +468,7 @@ namespace Project1 {
 					L"MOB-BÉR"
 			});
 			this->comboBox1->Location = System::Drawing::Point(168, 15);
-			this->comboBox1->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->comboBox1->Margin = System::Windows::Forms::Padding(4);
 			this->comboBox1->Name = L"comboBox1";
 			this->comboBox1->Size = System::Drawing::Size(160, 24);
 			this->comboBox1->TabIndex = 11;
@@ -462,7 +477,7 @@ namespace Project1 {
 			// numericUpDown3
 			// 
 			this->numericUpDown3->Location = System::Drawing::Point(168, 177);
-			this->numericUpDown3->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->numericUpDown3->Margin = System::Windows::Forms::Padding(4);
 			this->numericUpDown3->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 99999, 0, 0, 0 });
 			this->numericUpDown3->Name = L"numericUpDown3";
 			this->numericUpDown3->Size = System::Drawing::Size(160, 22);
@@ -473,7 +488,7 @@ namespace Project1 {
 			// 
 			this->dateTimePicker1->Format = System::Windows::Forms::DateTimePickerFormat::Short;
 			this->dateTimePicker1->Location = System::Drawing::Point(168, 272);
-			this->dateTimePicker1->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->dateTimePicker1->Margin = System::Windows::Forms::Padding(4);
 			this->dateTimePicker1->Name = L"dateTimePicker1";
 			this->dateTimePicker1->Size = System::Drawing::Size(157, 22);
 			this->dateTimePicker1->TabIndex = 13;
@@ -481,7 +496,7 @@ namespace Project1 {
 			// button2
 			// 
 			this->button2->Location = System::Drawing::Point(241, 358);
-			this->button2->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->button2->Margin = System::Windows::Forms::Padding(4);
 			this->button2->Name = L"button2";
 			this->button2->Size = System::Drawing::Size(88, 54);
 			this->button2->TabIndex = 14;
@@ -494,7 +509,7 @@ namespace Project1 {
 			this->textBox1->BackColor = System::Drawing::SystemColors::Control;
 			this->textBox1->BorderStyle = System::Windows::Forms::BorderStyle::None;
 			this->textBox1->Location = System::Drawing::Point(120, 18);
-			this->textBox1->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->textBox1->Margin = System::Windows::Forms::Padding(4);
 			this->textBox1->Name = L"textBox1";
 			this->textBox1->Size = System::Drawing::Size(40, 15);
 			this->textBox1->TabIndex = 15;
@@ -506,7 +521,7 @@ namespace Project1 {
 			this->textBox2->BackColor = System::Drawing::SystemColors::Control;
 			this->textBox2->BorderStyle = System::Windows::Forms::BorderStyle::None;
 			this->textBox2->Location = System::Drawing::Point(120, 50);
-			this->textBox2->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->textBox2->Margin = System::Windows::Forms::Padding(4);
 			this->textBox2->Name = L"textBox2";
 			this->textBox2->Size = System::Drawing::Size(33, 15);
 			this->textBox2->TabIndex = 16;
@@ -517,7 +532,7 @@ namespace Project1 {
 			this->textBox3->BackColor = System::Drawing::SystemColors::Control;
 			this->textBox3->BorderStyle = System::Windows::Forms::BorderStyle::None;
 			this->textBox3->Location = System::Drawing::Point(23, 137);
-			this->textBox3->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->textBox3->Margin = System::Windows::Forms::Padding(4);
 			this->textBox3->Multiline = true;
 			this->textBox3->Name = L"textBox3";
 			this->textBox3->Size = System::Drawing::Size(137, 26);
@@ -529,7 +544,7 @@ namespace Project1 {
 			this->textBox4->BackColor = System::Drawing::SystemColors::Control;
 			this->textBox4->BorderStyle = System::Windows::Forms::BorderStyle::None;
 			this->textBox4->Location = System::Drawing::Point(23, 180);
-			this->textBox4->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->textBox4->Margin = System::Windows::Forms::Padding(4);
 			this->textBox4->Multiline = true;
 			this->textBox4->Name = L"textBox4";
 			this->textBox4->Size = System::Drawing::Size(119, 26);
@@ -537,12 +552,36 @@ namespace Project1 {
 			this->textBox4->Text = L"Intervalum vége:";
 			this->textBox4->TextChanged += gcnew System::EventHandler(this, &MyForm::textBox4_TextChanged);
 			// 
+			// comboBox2
+			// 
+			this->comboBox2->FormattingEnabled = true;
+			this->comboBox2->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Érkezett", L"Kiküldve" });
+			this->comboBox2->Location = System::Drawing::Point(168, 240);
+			this->comboBox2->Margin = System::Windows::Forms::Padding(4);
+			this->comboBox2->Name = L"comboBox2";
+			this->comboBox2->Size = System::Drawing::Size(160, 24);
+			this->comboBox2->TabIndex = 19;
+			// 
+			// textBox5
+			// 
+			this->textBox5->BackColor = System::Drawing::SystemColors::Control;
+			this->textBox5->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->textBox5->Location = System::Drawing::Point(51, 240);
+			this->textBox5->Margin = System::Windows::Forms::Padding(4);
+			this->textBox5->Name = L"textBox5";
+			this->textBox5->Size = System::Drawing::Size(102, 15);
+			this->textBox5->TabIndex = 20;
+			this->textBox5->Text = L"Érkezett/Kikülve:";
+			this->textBox5->TextChanged += gcnew System::EventHandler(this, &MyForm::textBox5_TextChanged);
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::SystemColors::Control;
 			this->ClientSize = System::Drawing::Size(345, 427);
+			this->Controls->Add(this->textBox5);
+			this->Controls->Add(this->comboBox2);
 			this->Controls->Add(this->textBox4);
 			this->Controls->Add(this->textBox3);
 			this->Controls->Add(this->textBox2);
@@ -554,7 +593,7 @@ namespace Project1 {
 			this->Controls->Add(this->numericUpDown2);
 			this->Controls->Add(this->numericUpDown1);
 			this->Controls->Add(this->button1);
-			this->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
+			this->Margin = System::Windows::Forms::Padding(4);
 			this->Name = L"MyForm";
 			this->Text = L"MyForm";
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown1))->EndInit();
@@ -581,6 +620,7 @@ namespace Project1 {
 		auto YYYY = dateTimePicker1->Value.Year;
 		auto MM = dateTimePicker1->Value.Month;
 		auto DD = dateTimePicker1->Value.Day;
+		auto BeKi = comboBox2->SelectedIndex;
 
 		std::cout << std::format("Nyomtat gomb lenyomva.\nErtekek: {} {} {} {} {}.{}.{}\n", cFajta, Ev, K, V, YYYY, MM, DD);
 
@@ -594,7 +634,7 @@ namespace Project1 {
 			nap = std::format("0{}", nap);
 		}
 
-		nyomtatas(K, V, cFajta, Ev, std::format("{}.{}.{}", YYYY, honap, nap), 1);
+		nyomtatas(K, V, cFajta, Ev, std::format("{}.{}.{}", YYYY, honap, nap), 1, BeKi);
 
 		/*std::jthread t(nyomtatas, K, V, cFajta, Ev, std::format("{}.{}.{}", YYYY, MM, DD), 1);
 		t.detach();*/
@@ -602,7 +642,7 @@ namespace Project1 {
 
 		//nyomtatas(K, V, cFajta,Ev,std::format("{}.{}.{}", YYYY,MM,DD), 1);
 
-		this->Close();
+		//this->Close();
 
 	}
 	private: System::Void listBox1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
@@ -629,6 +669,7 @@ namespace Project1 {
 		auto YYYY = dateTimePicker1->Value.Year;
 		auto MM = dateTimePicker1->Value.Month;
 		auto DD = dateTimePicker1->Value.Day;
+		auto BeKi = comboBox2->SelectedIndex;
 
 		std::cout << std::format("Nyomtat gomb lenyomva.\nErtekek: {} {} {} {} {}.{}.{}\n", cFajta, Ev, K, V, YYYY, MM, DD);
 
@@ -642,13 +683,15 @@ namespace Project1 {
 			nap = std::format("0{}", nap);
 		}
 
-		nyomtatas(K, V, cFajta, Ev, std::format("{}.{}.{}", YYYY, honap, nap), 0);
+		nyomtatas(K, V, cFajta, Ev, std::format("{}.{}.{}", YYYY, honap, nap), 0, BeKi);
 
-		this->Close();
+		//this->Close();
 	}
 	private: System::Void textBox1_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 	}
 	private: System::Void textBox4_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 	}
-	};
+	private: System::Void textBox5_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+	}
+};
 }
