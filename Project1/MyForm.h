@@ -10,10 +10,20 @@
 #include <stdlib.h> // a wchar konverziohoz
 #include <thread>
 #include <chrono>
+#include <array>
+//#include <memory>
 
 #pragma comment(lib, "gdiplus.lib")
 #pragma comment(lib, "gdi32.lib")
 #pragma comment(lib, "comdlg32.lib")
+
+int hatvany(int alap, int hatvany) {
+	auto a = 1;
+	for (int i = 0; i < hatvany; ++i) {
+		a *= alap;
+	}
+	return a;
+}
 
 int find_nth_of(const std::string& str, const int n, const char ch) {
 	int num = 0;
@@ -28,11 +38,15 @@ int find_nth_of(const std::string& str, const int n, const char ch) {
 	return -1;
 }
 
-void fajlba_iras(int Fajta, int Ev, int IntervalumK, int IntervalumV, const std::string& Erkezett, int BeKi) {
+void fajlba_iras(int Fajta, int Ev, std::array<int, 12>* intervalumok, const std::string& Erkezett, int BeKi) {
 	std::ofstream o("settings.txt");
 	auto port = "Manualisan ne ird felul - SA";
 	if (o.is_open()) {
-		o << port << '\n' << Fajta << '\n' << Ev << '\n' << IntervalumK << '\n' << IntervalumV << '\n' << Erkezett << '\n' << BeKi<<'\n';
+		o << port << '\n' << Fajta << '\n' << Ev << "\n,";
+		for (const auto i : *intervalumok) {
+			o << i << ',';
+		}
+		o << '\n' << Erkezett << '\n' << BeKi << '\n';
 		o.close();
 	}
 }
@@ -45,7 +59,7 @@ auto to_wchar(const std::string& str) {
 	return wcstring;
 }
 
-void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, int nyom, int BeKi) {
+void nyomtatas(std::array<int, 12>* intervalumok, int K, int V, int Fajta, int EvI, const std::string& Erkezett, int nyom, int BeKi) {
 	auto Ev = std::to_string(EvI);
 	auto F = 0;
 	// Nyomtato kivalasztasa (az alapertelmezettre, ha nem akkor meg dobjon ablakot a PDFhez)
@@ -91,7 +105,7 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 				auto IntervalumK = std::to_string(kezdet);
 				//auto tiz = 1;
 				for (auto i = 0; i < 5; ++i) {
-					if (kezdet < 10 * i) {
+					if (kezdet < hatvany(10,i)) {
 						IntervalumK = '0' + IntervalumK;
 					}
 				}
@@ -164,6 +178,8 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 						wcsncat_s(erk.get(), newsize, we, wcslen(we));
 						wcsncat_s(erk.get(), newsize, seged.get(), wcslen(seged.get()));
 						TextOutW(hdc, 250, 150, erk.get(), static_cast<int>(wcslen(erk.get())));
+						(*intervalumok)[0] = K;
+						(*intervalumok)[1] = V;
 					}
 
 					if (Fajta == 1) {
@@ -183,6 +199,8 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 						wcsncat_s(erk.get(), newsize, we, wcslen(we));
 						wcsncat_s(erk.get(), newsize, seged.get(), wcslen(seged.get()));
 						TextOutW(hdc, 250, 150, erk.get(), static_cast<int>(wcslen(erk.get())));
+						(*intervalumok)[2] = K;
+						(*intervalumok)[3] = V;
 					}
 
 					if (Fajta == 2) {
@@ -202,6 +220,8 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 						wcsncat_s(erk.get(), newsize, we, wcslen(we));
 						wcsncat_s(erk.get(), newsize, seged.get(), wcslen(seged.get()));
 						TextOutW(hdc, 250, 150, erk.get(), static_cast<int>(wcslen(erk.get())));
+						(*intervalumok)[4] = K;
+						(*intervalumok)[5] = V;
 					}
 
 					if (Fajta == 3) {
@@ -221,6 +241,8 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 						wcsncat_s(erk.get(), newsize, we, wcslen(we));
 						wcsncat_s(erk.get(), newsize, seged.get(), wcslen(seged.get()));
 						TextOutW(hdc, 250, 150, erk.get(), static_cast<int>(wcslen(erk.get())));
+						(*intervalumok)[6] = K;
+						(*intervalumok)[7] = V;
 					}
 
 					if (Fajta == 4) {
@@ -240,6 +262,8 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 						wcsncat_s(erk.get(), newsize, we, wcslen(we));
 						wcsncat_s(erk.get(), newsize, seged.get(), wcslen(seged.get()));
 						TextOutW(hdc, 250, 150, erk.get(), static_cast<int>(wcslen(erk.get())));
+						(*intervalumok)[8] = K;
+						(*intervalumok)[9] = V;
 					}
 
 					if (Fajta == 5) {
@@ -259,6 +283,8 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 						wcsncat_s(erk.get(), newsize, we, wcslen(we));
 						wcsncat_s(erk.get(), newsize, seged.get(), wcslen(seged.get()));
 						TextOutW(hdc, 250, 150, erk.get(), static_cast<int>(wcslen(erk.get())));
+						(*intervalumok)[10] = K;
+						(*intervalumok)[11] = V;
 					}
 
 					//SelectObject(hdc, hOldFont);
@@ -286,7 +312,7 @@ void nyomtatas(int K, int V, int Fajta, int EvI, const std::string& Erkezett, in
 
 	//if(Fajta=="MOB")
 
-	fajlba_iras(F, EvI, K, V, Erkezett, BeKi);
+	fajlba_iras(F, EvI, intervalumok, Erkezett, BeKi);
 }
 
 namespace Project1 {
@@ -314,10 +340,18 @@ namespace Project1 {
 			auto port = std::string("Manualisan ne ird felul - SA");
 			auto Fajta = std::string("0");
 			auto Ev = std::string("2026");
-			auto IntervalumK = std::string("0");
-			auto IntervalumV = std::string("0");
+			auto interstring = std::string("");
+			/*auto IntervalumK = std::string("0");
+			auto IntervalumV = std::string("0");*/
 			auto Erkezett = std::string("2026.1.22");
 			auto BeKi = std::string("0");
+
+			//std::array<int, 12> intervalumok{};
+			intervalumok = new std::array<int, 12>();
+			for (int i = 0; i < 12; ++i) {
+				//intervalumok->at(i) = 0;
+				(*intervalumok)[i] = 0;
+			}
 
 			std::string line;
 			std::string conf;
@@ -331,17 +365,54 @@ namespace Project1 {
 				port = conf.substr(0, find_nth_of(conf, 1, '\n'));
 				Fajta = conf.substr(find_nth_of(conf, 1, '\n') + 1, find_nth_of(conf, 2, '\n') - find_nth_of(conf, 1, '\n') - 1);
 				Ev = conf.substr(find_nth_of(conf, 2, '\n') + 1, find_nth_of(conf, 3, '\n') - find_nth_of(conf, 2, '\n') - 1);
-				IntervalumK = conf.substr(find_nth_of(conf, 3, '\n') + 1, find_nth_of(conf, 4, '\n') - find_nth_of(conf, 3, '\n') - 1);
-				IntervalumV = conf.substr(find_nth_of(conf, 4, '\n') + 1, find_nth_of(conf, 5, '\n') - find_nth_of(conf, 4, '\n') - 1);
-				Erkezett = conf.substr(find_nth_of(conf, 5, '\n') + 1, find_nth_of(conf, 6, '\n') - find_nth_of(conf, 5, '\n') - 1);
-				BeKi = conf.substr(find_nth_of(conf, 6, '\n') + 1, find_nth_of(conf, 7, '\n') - find_nth_of(conf, 6, '\n') - 1);
+				/*IntervalumK = conf.substr(find_nth_of(conf, 3, '\n') + 1, find_nth_of(conf, 4, '\n') - find_nth_of(conf, 3, '\n') - 1);
+				IntervalumV = conf.substr(find_nth_of(conf, 4, '\n') + 1, find_nth_of(conf, 5, '\n') - find_nth_of(conf, 4, '\n') - 1);*/
+
+				interstring = conf.substr(find_nth_of(conf, 3, '\n') + 1, find_nth_of(conf, 4, '\n') - find_nth_of(conf, 3, '\n') - 1);
+
+				for (int i = 0; i < 12; ++i) {
+					(*intervalumok)[i] = std::stoi(interstring.substr(find_nth_of(interstring, i+1, ',') + 1, find_nth_of(interstring, i+2, ',') - find_nth_of(interstring, i+1, ',') - 1));
+				}
+
+				Erkezett = conf.substr(find_nth_of(conf, 4, '\n') + 1, find_nth_of(conf, 5, '\n') - find_nth_of(conf, 4, '\n') - 1);
+				BeKi = conf.substr(find_nth_of(conf, 5, '\n') + 1, find_nth_of(conf, 6, '\n') - find_nth_of(conf, 5, '\n') - 1);
 			}
 
 			this->comboBox1->SelectedIndex = std::stoi(Fajta);
 			this->numericUpDown1->Value = std::stoi(Ev);
 
-			this->numericUpDown2->Value = std::stoi(IntervalumK);
-			this->numericUpDown3->Value = std::stoi(IntervalumV);
+			auto IntervalumK = 0;
+			auto IntervalumV = 0;
+
+			switch (std::stoi(Fajta)) {
+			case 0:
+				IntervalumK = (*intervalumok)[0];
+				IntervalumV = (*intervalumok)[1];
+				break;
+			case 1:
+				IntervalumK = (*intervalumok)[2];
+				IntervalumV = (*intervalumok)[3];
+				break;
+			case 2:
+				IntervalumK = (*intervalumok)[4];
+				IntervalumV = (*intervalumok)[5];
+				break;
+			case 3:
+				IntervalumK = (*intervalumok)[6];
+				IntervalumV = (*intervalumok)[7];
+				break;
+			case 4:
+				IntervalumK = (*intervalumok)[8];
+				IntervalumV = (*intervalumok)[9];
+				break;
+			case 5:
+				IntervalumK = (*intervalumok)[10];
+				IntervalumV = (*intervalumok)[11];
+				break;
+			}
+
+			this->numericUpDown2->Value = IntervalumK;
+			this->numericUpDown3->Value = IntervalumV;
 
 			this->comboBox2->SelectedIndex = std::stoi(BeKi);
 
@@ -397,6 +468,7 @@ namespace Project1 {
 	protected:
 
 	private:
+		std::array<int, 12>* intervalumok;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -634,7 +706,7 @@ namespace Project1 {
 			nap = std::format("0{}", nap);
 		}
 
-		nyomtatas(K, V, cFajta, Ev, std::format("{}.{}.{}", YYYY, honap, nap), 1, BeKi);
+		nyomtatas(intervalumok, K, V, cFajta, Ev, std::format("{}.{}.{}", YYYY, honap, nap), 1, BeKi);
 
 		/*std::jthread t(nyomtatas, K, V, cFajta, Ev, std::format("{}.{}.{}", YYYY, MM, DD), 1);
 		t.detach();*/
@@ -654,6 +726,32 @@ namespace Project1 {
 	private: System::Void listView1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
 	}
 	private: System::Void comboBox1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
+		switch (comboBox1->SelectedIndex) {
+		case 0:
+			numericUpDown2->Value = (*intervalumok)[0];
+			numericUpDown3->Value = (*intervalumok)[1];
+			break;
+		case 1:
+			numericUpDown2->Value = (*intervalumok)[2];
+			numericUpDown3->Value = (*intervalumok)[3];
+			break;
+		case 2:
+			numericUpDown2->Value = (*intervalumok)[4];
+			numericUpDown3->Value = (*intervalumok)[5];
+			break;
+		case 3:
+			numericUpDown2->Value = (*intervalumok)[6];
+			numericUpDown3->Value = (*intervalumok)[7];
+			break;
+		case 4:
+			numericUpDown2->Value = (*intervalumok)[8];
+			numericUpDown3->Value = (*intervalumok)[9];
+			break;
+		case 5:
+			numericUpDown2->Value = (*intervalumok)[10];
+			numericUpDown3->Value = (*intervalumok)[11];
+			break;
+		}
 	}
 	private: System::Void numericUpDown3_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
 	}
@@ -683,7 +781,7 @@ namespace Project1 {
 			nap = std::format("0{}", nap);
 		}
 
-		nyomtatas(K, V, cFajta, Ev, std::format("{}.{}.{}", YYYY, honap, nap), 0, BeKi);
+		nyomtatas(intervalumok, K, V, cFajta, Ev, std::format("{}.{}.{}", YYYY, honap, nap), 0, BeKi);
 
 		//this->Close();
 	}

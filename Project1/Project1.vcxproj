@@ -148,11 +148,11 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="settings.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <Image Include="Hungarian_Olympic_Committee_logo.bmp" />
     <Image Include="logo.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="settings.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
