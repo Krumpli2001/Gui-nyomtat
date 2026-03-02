@@ -369,6 +369,7 @@ namespace Project1 {
 
 			//std::array<int, 12> intervalumok{};
 			intervalumok = new std::array<int, 12>();
+			prevK = new int;
 			for (int i = 0; i < 12; ++i) {
 				//intervalumok->at(i) = 0;
 				(*intervalumok)[i] = 0;
@@ -474,6 +475,7 @@ namespace Project1 {
 			auto asd = this->gdiplusToken;
 			Gdiplus::GdiplusStartup(&asd, &gdiplusStartupInput, NULL);
 			//auto asd = this->gdiplusToken;
+			*prevK = IntervalumK;
 		}
 
 	protected:
@@ -488,7 +490,10 @@ namespace Project1 {
 			}
 			auto asd = this->gdiplusToken;
 			Gdiplus::GdiplusShutdown(asd);
-
+			//csak egyszer van meghivva a new, nem okoz leket, crashel ha megprobalom deletelni, 
+			// valoszinuleg ezek is component-nek szamitanak
+			//delete intervalumok;
+			//delete prevK;
 		}
 
 	protected:
@@ -522,6 +527,7 @@ namespace Project1 {
 
 	private:
 		std::array<int, 12>* intervalumok;
+		int* prevK;
 		std::array<std::string, 6>* datumok;
 		std::array<bool, 6>* irany;
 		/// <summary>
@@ -586,6 +592,7 @@ namespace Project1 {
 			this->numericUpDown2->Name = L"numericUpDown2";
 			this->numericUpDown2->Size = System::Drawing::Size(160, 22);
 			this->numericUpDown2->TabIndex = 6;
+			this->numericUpDown2->ValueChanged += gcnew System::EventHandler(this, &MyForm::numericUpDown2_ValueChanged);
 			// 
 			// comboBox1
 			// 
@@ -770,6 +777,17 @@ namespace Project1 {
 	private: System::Void listBox1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
 	}
 	private: System::Void numericUpDown1_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
+	}
+	private: System::Void numericUpDown2_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
+
+		auto K = System::Decimal::ToInt32(numericUpDown2->Value);
+		//std::cout << std::format("{} {}\n", K, *prevK);
+		auto kulonbseg = K - *prevK;
+		std::cout << std::format("{}\n", kulonbseg);
+		*prevK = K;
+
+		numericUpDown3->Value = System::Decimal::ToInt32(numericUpDown3->Value) + kulonbseg;
+
 	}
 	private: System::Void dateTimePicker1_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
 	}
