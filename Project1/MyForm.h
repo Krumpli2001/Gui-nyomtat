@@ -38,7 +38,7 @@ int find_nth_of(const std::string& str, const int n, const char ch) {
 	return -1;
 }
 
-void fajlba_iras(int Fajta, int Ev, std::array<int, 12>* intervalumok, const std::string& Erkezett, int BeKi) {
+void fajlba_iras(int Fajta, int Ev, std::array<int, 12>* intervalumok, std::array<std::string, 6>* datumok, std::array<bool, 6>* irany) {
 	std::ofstream o("settings.txt");
 	auto port = "Manualisan ne ird felul - SA";
 	if (o.is_open()) {
@@ -46,7 +46,16 @@ void fajlba_iras(int Fajta, int Ev, std::array<int, 12>* intervalumok, const std
 		for (const auto i : *intervalumok) {
 			o << i << ',';
 		}
-		o << '\n' << Erkezett << '\n' << BeKi << '\n';
+		o << "\n,";
+		for (const auto i : *datumok) {
+			o << i << ',';
+		}
+		o << "\n,";
+		for (const auto i : *irany) {
+			o << i << ',';
+		}
+		o << '\n';
+		//o << '\n' << Erkezett << '\n' << BeKi << '\n';
 		o.close();
 	}
 }
@@ -59,7 +68,14 @@ auto to_wchar(const std::string& str) {
 	return wcstring;
 }
 
-void nyomtatas(std::array<int, 12>* intervalumok, int K, int V, int Fajta, int EvI, const std::string& Erkezett, int nyom, int BeKi) {
+std::tuple<int, int, int> strdatumTotuple(const std::string& datum) {
+	auto YYYY = std::stoi(datum.substr(0, find_nth_of(datum, 1, '.')));
+	auto MM = std::stoi(datum.substr(find_nth_of(datum, 1, '.') + 1, find_nth_of(datum, 2, '.') - find_nth_of(datum, 1, '.') - 1));
+	auto DD = std::stoi(datum.substr(find_nth_of(datum, 2, '.') + 1, find_nth_of(datum, 3, '.') - find_nth_of(datum, 2, '.') - 1));
+	return std::make_tuple(YYYY, MM, DD);
+}
+
+void nyomtatas(std::array<int, 12>* intervalumok, int K, int V, int Fajta, int EvI, std::array<std::string, 6>* datumok, int nyom, std::array<bool, 6>* irany) {
 	auto Ev = std::to_string(EvI);
 	auto F = 0;
 	// Nyomtato kivalasztasa (az alapertelmezettre, ha nem akkor meg dobjon ablakot a PDFhez)
@@ -158,9 +174,9 @@ void nyomtatas(std::array<int, 12>* intervalumok, int K, int V, int Fajta, int E
 					TextOutW(hdc, MOBx, MOBy, MOB, static_cast<int>(wcslen(MOB)));
 
 					auto we = L"Érkezett: ";
-					if (BeKi) {
+					/*if (BeKi) {
 						we = L"Kiküldve: ";
-					}
+					}*/
 
 					if (Fajta == 0) {
 						SelectObject(hdc, hBoldFont);
@@ -170,7 +186,7 @@ void nyomtatas(std::array<int, 12>* intervalumok, int K, int V, int Fajta, int E
 						auto wfaj = to_wchar(faj);
 						TextOutW(hdc, 255, 80, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
 						SelectObject(hdc, hFont);
-						auto e = Erkezett;
+						auto e = (*datumok)[0];
 						auto seged = to_wchar(e);
 						//auto we = L"Érkezett: ";
 						auto newsize = wcslen(we) + wcslen(seged.get()) + 1;
@@ -191,7 +207,7 @@ void nyomtatas(std::array<int, 12>* intervalumok, int K, int V, int Fajta, int E
 						auto wfaj = to_wchar(faj);
 						TextOutW(hdc, 255, 80, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
 						SelectObject(hdc, hFont);
-						auto e = Erkezett;
+						auto e = (*datumok)[1];
 						auto seged = to_wchar(e);
 						//auto we = L"Érkezett: ";
 						auto newsize = wcslen(we) + wcslen(seged.get()) + 1;
@@ -212,7 +228,7 @@ void nyomtatas(std::array<int, 12>* intervalumok, int K, int V, int Fajta, int E
 						auto wfaj = to_wchar(faj);
 						TextOutW(hdc, 255, 80, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
 						SelectObject(hdc, hFont);
-						auto e = Erkezett;
+						auto e = (*datumok)[2];
 						auto seged = to_wchar(e);
 						//auto we = L"Érkezett: ";
 						auto newsize = wcslen(we) + wcslen(seged.get()) + 1;
@@ -233,7 +249,7 @@ void nyomtatas(std::array<int, 12>* intervalumok, int K, int V, int Fajta, int E
 						auto wfaj = to_wchar(faj);
 						TextOutW(hdc, 255, 80, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
 						SelectObject(hdc, hFont);
-						auto e = Erkezett;
+						auto e = (*datumok)[3];
 						auto seged = to_wchar(e);
 						//auto we = L"Érkezett: ";
 						auto newsize = wcslen(we) + wcslen(seged.get()) + 1;
@@ -254,7 +270,7 @@ void nyomtatas(std::array<int, 12>* intervalumok, int K, int V, int Fajta, int E
 						auto wfaj = to_wchar(faj);
 						TextOutW(hdc, 255, 80, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
 						SelectObject(hdc, hFont);
-						auto e = Erkezett;
+						auto e = (*datumok)[4];
 						auto seged = to_wchar(e);
 						//auto we = L"Érkezett: ";
 						auto newsize = wcslen(we) + wcslen(seged.get()) + 1;
@@ -275,7 +291,7 @@ void nyomtatas(std::array<int, 12>* intervalumok, int K, int V, int Fajta, int E
 						auto wfaj = to_wchar(faj);
 						TextOutW(hdc, 255, 80, wfaj.get(), static_cast<int>(wcslen(wfaj.get())));
 						SelectObject(hdc, hFont);
-						auto e = Erkezett;
+						auto e = (*datumok)[5];
 						auto seged = to_wchar(e);
 						//auto we = L"Érkezett: ";
 						auto newsize = wcslen(we) + wcslen(seged.get()) + 1;
@@ -312,7 +328,7 @@ void nyomtatas(std::array<int, 12>* intervalumok, int K, int V, int Fajta, int E
 
 	//if(Fajta=="MOB")
 
-	fajlba_iras(F, EvI, intervalumok, Erkezett, BeKi);
+	fajlba_iras(F, EvI, intervalumok, datumok, irany);
 }
 
 namespace Project1 {
@@ -343,14 +359,24 @@ namespace Project1 {
 			auto interstring = std::string("");
 			/*auto IntervalumK = std::string("0");
 			auto IntervalumV = std::string("0");*/
-			auto Erkezett = std::string("2026.1.22");
-			auto BeKi = std::string("0");
+			//auto Erkezett = std::string("2026.1.22");
+			//auto BeKi = std::string("0");
+
+			datumok = new std::array<std::string, 6>();
+			for (int i = 0; i < 6; ++i) {
+				(*datumok)[i] = "2026.3.02";
+			}
 
 			//std::array<int, 12> intervalumok{};
 			intervalumok = new std::array<int, 12>();
 			for (int i = 0; i < 12; ++i) {
 				//intervalumok->at(i) = 0;
 				(*intervalumok)[i] = 0;
+			}
+
+			irany = new std::array<bool, 6>();
+			for (int i = 0; i < 6; ++i) {
+				(*irany)[i] = false;
 			}
 
 			std::string line;
@@ -371,11 +397,23 @@ namespace Project1 {
 				interstring = conf.substr(find_nth_of(conf, 3, '\n') + 1, find_nth_of(conf, 4, '\n') - find_nth_of(conf, 3, '\n') - 1);
 
 				for (int i = 0; i < 12; ++i) {
-					(*intervalumok)[i] = std::stoi(interstring.substr(find_nth_of(interstring, i+1, ',') + 1, find_nth_of(interstring, i+2, ',') - find_nth_of(interstring, i+1, ',') - 1));
+					(*intervalumok)[i] = std::stoi(interstring.substr(find_nth_of(interstring, i + 1, ',') + 1, find_nth_of(interstring, i + 2, ',') - find_nth_of(interstring, i + 1, ',') - 1));
 				}
 
-				Erkezett = conf.substr(find_nth_of(conf, 4, '\n') + 1, find_nth_of(conf, 5, '\n') - find_nth_of(conf, 4, '\n') - 1);
-				BeKi = conf.substr(find_nth_of(conf, 5, '\n') + 1, find_nth_of(conf, 6, '\n') - find_nth_of(conf, 5, '\n') - 1);
+				interstring = conf.substr(find_nth_of(conf, 4, '\n') + 1, find_nth_of(conf, 5, '\n') - find_nth_of(conf, 4, '\n') - 1);
+
+				for (int i = 0; i < 6; ++i) {
+					(*datumok)[i] = interstring.substr(find_nth_of(interstring, i + 1, ',') + 1, find_nth_of(interstring, i + 2, ',') - find_nth_of(interstring, i + 1, ',') - 1);
+				}
+
+				interstring = conf.substr(find_nth_of(conf, 5, '\n') + 1, find_nth_of(conf, 6, '\n') - find_nth_of(conf, 5, '\n') - 1);
+
+				for (int i = 0; i < 6; ++i) {
+					(*irany)[i] = std::stoi(interstring.substr(find_nth_of(interstring, i + 1, ',') + 1, find_nth_of(interstring, i + 2, ',') - find_nth_of(interstring, i + 1, ',') - 1));
+				}
+
+				/*Erkezett = conf.substr(find_nth_of(conf, 4, '\n') + 1, find_nth_of(conf, 5, '\n') - find_nth_of(conf, 4, '\n') - 1);
+				BeKi = conf.substr(find_nth_of(conf, 5, '\n') + 1, find_nth_of(conf, 6, '\n') - find_nth_of(conf, 5, '\n') - 1);*/
 			}
 
 			this->comboBox1->SelectedIndex = std::stoi(Fajta);
@@ -384,37 +422,52 @@ namespace Project1 {
 			auto IntervalumK = 0;
 			auto IntervalumV = 0;
 
+			std::string Erkezett = "";
+			bool BeKi = false;
+
 			switch (std::stoi(Fajta)) {
 			case 0:
 				IntervalumK = (*intervalumok)[0];
 				IntervalumV = (*intervalumok)[1];
+				Erkezett = (*datumok)[0];
+				BeKi = (*irany)[0];
 				break;
 			case 1:
 				IntervalumK = (*intervalumok)[2];
 				IntervalumV = (*intervalumok)[3];
+				Erkezett = (*datumok)[1];
+				BeKi = (*irany)[1];
 				break;
 			case 2:
 				IntervalumK = (*intervalumok)[4];
 				IntervalumV = (*intervalumok)[5];
+				Erkezett = (*datumok)[2];
+				BeKi = (*irany)[2];
 				break;
 			case 3:
 				IntervalumK = (*intervalumok)[6];
 				IntervalumV = (*intervalumok)[7];
+				Erkezett = (*datumok)[3];
+				BeKi = (*irany)[3];
 				break;
 			case 4:
 				IntervalumK = (*intervalumok)[8];
 				IntervalumV = (*intervalumok)[9];
+				Erkezett = (*datumok)[4];
+				BeKi = (*irany)[4];
 				break;
 			case 5:
 				IntervalumK = (*intervalumok)[10];
 				IntervalumV = (*intervalumok)[11];
+				Erkezett = (*datumok)[5];
+				BeKi = (*irany)[5];
 				break;
 			}
 
 			this->numericUpDown2->Value = IntervalumK;
 			this->numericUpDown3->Value = IntervalumV;
 
-			this->comboBox2->SelectedIndex = std::stoi(BeKi);
+			this->comboBox2->SelectedIndex = BeKi;
 
 			//kep nyomtatas inicializalasa 15*240
 			Gdiplus::GdiplusStartupInput gdiplusStartupInput;
@@ -469,6 +522,8 @@ namespace Project1 {
 
 	private:
 		std::array<int, 12>* intervalumok;
+		std::array<std::string, 6>* datumok;
+		std::array<bool, 6>* irany;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -694,7 +749,7 @@ namespace Project1 {
 		auto DD = dateTimePicker1->Value.Day;
 		auto BeKi = comboBox2->SelectedIndex;
 
-		std::cout << std::format("Nyomtat gomb lenyomva.\nErtekek: {} {} {} {} {}.{}.{}\n", cFajta, Ev, K, V, YYYY, MM, DD);
+		//std::cout << std::format("Nyomtat gomb lenyomva.\nErtekek: {} {} {} {} {}.{}.{}\n", cFajta, Ev, K, V, YYYY, MM, DD);
 
 		auto honap = std::to_string(MM);
 		auto nap = std::to_string(DD);
@@ -706,15 +761,10 @@ namespace Project1 {
 			nap = std::format("0{}", nap);
 		}
 
-		nyomtatas(intervalumok, K, V, cFajta, Ev, std::format("{}.{}.{}", YYYY, honap, nap), 1, BeKi);
+		(*datumok)[cFajta] = std::format("{}.{}.{}", YYYY, MM, DD);
+		(*irany)[cFajta] = BeKi ? 1 : 0;
 
-		/*std::jthread t(nyomtatas, K, V, cFajta, Ev, std::format("{}.{}.{}", YYYY, MM, DD), 1);
-		t.detach();*/
-
-
-		//nyomtatas(K, V, cFajta,Ev,std::format("{}.{}.{}", YYYY,MM,DD), 1);
-
-		//this->Close();
+		nyomtatas(intervalumok, K, V, cFajta, Ev, datumok, 1, irany);
 
 	}
 	private: System::Void listBox1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
@@ -726,30 +776,55 @@ namespace Project1 {
 	private: System::Void listView1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
 	}
 	private: System::Void comboBox1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
+
+		auto YYYY = 0;
+		auto MM = 0;
+		auto DD = 0;
+
+		std::tuple<int, int, int> t;
+
 		switch (comboBox1->SelectedIndex) {
 		case 0:
 			numericUpDown2->Value = (*intervalumok)[0];
 			numericUpDown3->Value = (*intervalumok)[1];
+			t = strdatumTotuple((*datumok)[0]);
+			dateTimePicker1->Value = DateTime(std::get<0>(t), std::get<1>(t), std::get<2>(t));
+			comboBox2->SelectedIndex = (*irany)[0];
 			break;
 		case 1:
 			numericUpDown2->Value = (*intervalumok)[2];
 			numericUpDown3->Value = (*intervalumok)[3];
+			t = strdatumTotuple((*datumok)[1]);
+			dateTimePicker1->Value = DateTime(std::get<0>(t), std::get<1>(t), std::get<2>(t));
+			comboBox2->SelectedIndex = (*irany)[1];
 			break;
 		case 2:
 			numericUpDown2->Value = (*intervalumok)[4];
 			numericUpDown3->Value = (*intervalumok)[5];
+			t = strdatumTotuple((*datumok)[2]);
+			dateTimePicker1->Value = DateTime(std::get<0>(t), std::get<1>(t), std::get<2>(t));
+			comboBox2->SelectedIndex = (*irany)[2];
 			break;
 		case 3:
 			numericUpDown2->Value = (*intervalumok)[6];
 			numericUpDown3->Value = (*intervalumok)[7];
+			t = strdatumTotuple((*datumok)[3]);
+			dateTimePicker1->Value = DateTime(std::get<0>(t), std::get<1>(t), std::get<2>(t));
+			comboBox2->SelectedIndex = (*irany)[3];
 			break;
 		case 4:
 			numericUpDown2->Value = (*intervalumok)[8];
 			numericUpDown3->Value = (*intervalumok)[9];
+			t = strdatumTotuple((*datumok)[4]);
+			dateTimePicker1->Value = DateTime(std::get<0>(t), std::get<1>(t), std::get<2>(t));
+			comboBox2->SelectedIndex = (*irany)[4];
 			break;
 		case 5:
 			numericUpDown2->Value = (*intervalumok)[10];
 			numericUpDown3->Value = (*intervalumok)[11];
+			t = strdatumTotuple((*datumok)[5]);
+			dateTimePicker1->Value = DateTime(std::get<0>(t), std::get<1>(t), std::get<2>(t));
+			comboBox2->SelectedIndex = (*irany)[5];
 			break;
 		}
 	}
@@ -769,7 +844,7 @@ namespace Project1 {
 		auto DD = dateTimePicker1->Value.Day;
 		auto BeKi = comboBox2->SelectedIndex;
 
-		std::cout << std::format("Nyomtat gomb lenyomva.\nErtekek: {} {} {} {} {}.{}.{}\n", cFajta, Ev, K, V, YYYY, MM, DD);
+		//std::cout << std::format("Nyomtat gomb lenyomva.\nErtekek: {} {} {} {} {}.{}.{}\n", cFajta, Ev, K, V, YYYY, MM, DD);
 
 		auto honap = std::to_string(MM);
 		auto nap = std::to_string(DD);
@@ -781,7 +856,10 @@ namespace Project1 {
 			nap = std::format("0{}", nap);
 		}
 
-		nyomtatas(intervalumok, K, V, cFajta, Ev, std::format("{}.{}.{}", YYYY, honap, nap), 0, BeKi);
+		(*datumok)[cFajta] = std::format("{}.{}.{}", YYYY, MM, DD);
+		(*irany)[cFajta] = BeKi ? 1 : 0;
+
+		nyomtatas(intervalumok, K, V, cFajta, Ev, datumok, 0, irany);
 
 		//this->Close();
 	}
