@@ -385,6 +385,7 @@ namespace Project1 {
 			//std::array<int, 12> intervalumok{};
 			intervalumok = new std::array<int, 12>();
 			prevK = new int;
+			*prevK = 0;
 			for (int i = 0; i < 12; ++i) {
 				//intervalumok->at(i) = 0;
 				(*intervalumok)[i] = 0;
