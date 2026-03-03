@@ -174,11 +174,11 @@ void nyomtatas(std::array<int, 12>* intervalumok, int K, int V, int Fajta, int E
 					TextOutW(hdc, MOBx, MOBy, MOB, static_cast<int>(wcslen(MOB)));
 
 					auto we = L"Érkezett: ";
-					/*if (BeKi) {
-						we = L"Kiküldve: ";
-					}*/
 
 					if (Fajta == 0) {
+						if ((*irany)[0]) {
+							we = L"Kiküldve: ";
+						}
 						SelectObject(hdc, hBoldFont);
 						auto mob = L"MOB-";
 						TextOutW(hdc, 315, 20, mob, static_cast<int>(wcslen(mob)));
@@ -198,7 +198,10 @@ void nyomtatas(std::array<int, 12>* intervalumok, int K, int V, int Fajta, int E
 						(*intervalumok)[1] = V;
 					}
 
-					if (Fajta == 1) {
+					else if (Fajta == 1) {
+						if ((*irany)[1]) {
+							we = L"Kiküldve: ";
+						}
 						SelectObject(hdc, hBoldFont);
 						F = 1;
 						auto szla = L"SZLA-";
@@ -219,7 +222,10 @@ void nyomtatas(std::array<int, 12>* intervalumok, int K, int V, int Fajta, int E
 						(*intervalumok)[3] = V;
 					}
 
-					if (Fajta == 2) {
+					else if (Fajta == 2) {
+						if ((*irany)[2]) {
+							we = L"Kiküldve: ";
+						}
 						SelectObject(hdc, hBoldFont);
 						F = 2;
 						auto mobdok = L"MOB-DOK-";
@@ -240,7 +246,10 @@ void nyomtatas(std::array<int, 12>* intervalumok, int K, int V, int Fajta, int E
 						(*intervalumok)[5] = V;
 					}
 
-					if (Fajta == 3) {
+					else if (Fajta == 3) {
+						if ((*irany)[3]) {
+							we = L"Kiküldve: ";
+						}
 						SelectObject(hdc, hBoldFont);
 						F = 3;
 						auto mobdok = L"SÁVB-";
@@ -261,7 +270,10 @@ void nyomtatas(std::array<int, 12>* intervalumok, int K, int V, int Fajta, int E
 						(*intervalumok)[7] = V;
 					}
 
-					if (Fajta == 4) {
+					else if (Fajta == 4) {
+						if ((*irany)[4]) {
+							we = L"Kiküldve: ";
+						}
 						SelectObject(hdc, hBoldFont);
 						F = 4;
 						auto mobdok = L"MOB-2K-";
@@ -282,7 +294,10 @@ void nyomtatas(std::array<int, 12>* intervalumok, int K, int V, int Fajta, int E
 						(*intervalumok)[9] = V;
 					}
 
-					if (Fajta == 5) {
+					else if (Fajta == 5) {
+						if ((*irany)[5]) {
+							we = L"Kiküldve: ";
+						}
 						SelectObject(hdc, hBoldFont);
 						F = 5;
 						auto mobdok = L"MOB-BÉR-";
@@ -768,7 +783,7 @@ namespace Project1 {
 			nap = std::format("0{}", nap);
 		}
 
-		(*datumok)[cFajta] = std::format("{}.{}.{}", YYYY, MM, DD);
+		(*datumok)[cFajta] = std::format("{}.{}.{}", YYYY, honap, nap);
 		(*irany)[cFajta] = BeKi ? 1 : 0;
 
 		nyomtatas(intervalumok, K, V, cFajta, Ev, datumok, 1, irany);
@@ -787,6 +802,9 @@ namespace Project1 {
 		*prevK = K;
 
 		numericUpDown3->Value = System::Decimal::ToInt32(numericUpDown3->Value) + kulonbseg;
+
+		dateTimePicker1->Value = DateTime().Today;
+		comboBox2->SelectedIndex = 0;
 
 	}
 	private: System::Void dateTimePicker1_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
@@ -847,6 +865,8 @@ namespace Project1 {
 		}
 	}
 	private: System::Void numericUpDown3_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
+		dateTimePicker1->Value = DateTime().Today;
+		comboBox2->SelectedIndex = 0;
 	}
 	private: System::Void dateTimePicker2_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
 	}
@@ -874,7 +894,7 @@ namespace Project1 {
 			nap = std::format("0{}", nap);
 		}
 
-		(*datumok)[cFajta] = std::format("{}.{}.{}", YYYY, MM, DD);
+		(*datumok)[cFajta] = std::format("{}.{}.{}", YYYY, honap, nap);
 		(*irany)[cFajta] = BeKi ? 1 : 0;
 
 		nyomtatas(intervalumok, K, V, cFajta, Ev, datumok, 0, irany);
