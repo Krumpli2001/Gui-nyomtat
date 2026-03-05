@@ -160,9 +160,6 @@ void nyomtatas(std::array<int, 12>* intervalumok, int K, int V, int Fajta, int E
 
 					std::cout << std::format("{} {}\n", w, h);
 
-					//Milyen stringet irjon ki + koordinatak
-					//const wchar_t* MOB = L"123456789223456789323456789423456789523456789623456789723456789";
-
 					auto MOBx = 110;
 					auto MOBy = 165;
 
@@ -174,6 +171,8 @@ void nyomtatas(std::array<int, 12>* intervalumok, int K, int V, int Fajta, int E
 					TextOutW(hdc, MOBx, MOBy, MOB, static_cast<int>(wcslen(MOB)));
 
 					auto we = L"Érkezett: ";
+
+					// a goto-k miatt nem switch-caseel van megoldva...
 
 					if (Fajta == 0) {
 						if ((*irany)[0]) {
@@ -364,18 +363,11 @@ namespace Project1 {
 		MyForm(void)
 		{
 			InitializeComponent();
-			//
-			//TODO: Add the constructor code here
-			//
 
 			auto port = std::string("Manualisan ne ird felul - SA");
 			auto Fajta = std::string("0");
 			auto Ev = std::string("2026");
 			auto interstring = std::string("");
-			/*auto IntervalumK = std::string("0");
-			auto IntervalumV = std::string("0");*/
-			//auto Erkezett = std::string("2026.1.22");
-			//auto BeKi = std::string("0");
 
 			datumok = new std::array<std::string, 6>();
 			for (int i = 0; i < 6; ++i) {
@@ -801,11 +793,57 @@ namespace Project1 {
 		auto kulonbseg = K - *prevK;
 		std::cout << std::format("{}\n", kulonbseg);
 		*prevK = K;
+		std::tuple<int, int, int> t;
 
 		numericUpDown3->Value = System::Decimal::ToInt32(numericUpDown3->Value) + kulonbseg;
 
 		dateTimePicker1->Value = DateTime().Today;
 		comboBox2->SelectedIndex = 0;
+
+		switch (comboBox1->SelectedIndex) {
+		case 0:
+			if (System::Decimal::ToInt32(numericUpDown2->Value) == (*intervalumok)[0] && System::Decimal::ToInt32(numericUpDown3->Value) == (*intervalumok)[1]) {
+				comboBox2->SelectedIndex = (*irany)[0];
+				t = strdatumTotuple((*datumok)[0]);
+				dateTimePicker1->Value = DateTime(std::get<0>(t), std::get<1>(t), std::get<2>(t));
+			}
+			break;
+		case 1:
+			if (System::Decimal::ToInt32(numericUpDown2->Value) == (*intervalumok)[2] && System::Decimal::ToInt32(numericUpDown3->Value) == (*intervalumok)[3]) {
+				comboBox2->SelectedIndex = (*irany)[1];
+				t = strdatumTotuple((*datumok)[1]);
+				dateTimePicker1->Value = DateTime(std::get<0>(t), std::get<1>(t), std::get<2>(t));
+			}
+			break;
+		case 2:
+			if (System::Decimal::ToInt32(numericUpDown2->Value) == (*intervalumok)[4] && System::Decimal::ToInt32(numericUpDown3->Value) == (*intervalumok)[5]) {
+				comboBox2->SelectedIndex = (*irany)[2];
+				t = strdatumTotuple((*datumok)[2]);
+				dateTimePicker1->Value = DateTime(std::get<0>(t), std::get<1>(t), std::get<2>(t));
+			}
+			break;
+		case 3:
+			if (System::Decimal::ToInt32(numericUpDown2->Value) == (*intervalumok)[6] && System::Decimal::ToInt32(numericUpDown3->Value) == (*intervalumok)[7]) {
+				comboBox2->SelectedIndex = (*irany)[3];
+				t = strdatumTotuple((*datumok)[3]);
+				dateTimePicker1->Value = DateTime(std::get<0>(t), std::get<1>(t), std::get<2>(t));
+			}
+			break;
+		case 4:
+			if (System::Decimal::ToInt32(numericUpDown2->Value) == (*intervalumok)[8] && System::Decimal::ToInt32(numericUpDown3->Value) == (*intervalumok)[9]) {
+				comboBox2->SelectedIndex = (*irany)[4];
+				t = strdatumTotuple((*datumok)[4]);
+				dateTimePicker1->Value = DateTime(std::get<0>(t), std::get<1>(t), std::get<2>(t));
+			}
+			break;
+		case 5:
+			if (System::Decimal::ToInt32(numericUpDown2->Value) == (*intervalumok)[10] && System::Decimal::ToInt32(numericUpDown3->Value) == (*intervalumok)[11]) {
+				comboBox2->SelectedIndex = (*irany)[5];
+				t = strdatumTotuple((*datumok)[5]);
+				dateTimePicker1->Value = DateTime(std::get<0>(t), std::get<1>(t), std::get<2>(t));
+			}
+			break;
+		}
 
 	}
 	private: System::Void dateTimePicker1_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
@@ -868,6 +906,53 @@ namespace Project1 {
 	private: System::Void numericUpDown3_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
 		dateTimePicker1->Value = DateTime().Today;
 		comboBox2->SelectedIndex = 0;
+
+		std::tuple<int, int, int> t;
+
+		switch (comboBox1->SelectedIndex) {
+		case 0:
+			if (System::Decimal::ToInt32(numericUpDown2->Value) == (*intervalumok)[0] && System::Decimal::ToInt32(numericUpDown3->Value) == (*intervalumok)[1]) {
+				comboBox2->SelectedIndex = (*irany)[0];
+				t = strdatumTotuple((*datumok)[0]);
+				dateTimePicker1->Value = DateTime(std::get<0>(t), std::get<1>(t), std::get<2>(t));
+			}
+			break;
+		case 1:
+			if (System::Decimal::ToInt32(numericUpDown2->Value) == (*intervalumok)[2] && System::Decimal::ToInt32(numericUpDown3->Value) == (*intervalumok)[3]) {
+				comboBox2->SelectedIndex = (*irany)[1];
+				t = strdatumTotuple((*datumok)[1]);
+				dateTimePicker1->Value = DateTime(std::get<0>(t), std::get<1>(t), std::get<2>(t));
+			}
+			break;
+		case 2:
+			if (System::Decimal::ToInt32(numericUpDown2->Value) == (*intervalumok)[4] && System::Decimal::ToInt32(numericUpDown3->Value) == (*intervalumok)[5]) {
+				comboBox2->SelectedIndex = (*irany)[2];
+				t = strdatumTotuple((*datumok)[2]);
+				dateTimePicker1->Value = DateTime(std::get<0>(t), std::get<1>(t), std::get<2>(t));
+			}
+			break;
+		case 3:
+			if (System::Decimal::ToInt32(numericUpDown2->Value) == (*intervalumok)[6] && System::Decimal::ToInt32(numericUpDown3->Value) == (*intervalumok)[7]) {
+				comboBox2->SelectedIndex = (*irany)[3];
+				t = strdatumTotuple((*datumok)[3]);
+				dateTimePicker1->Value = DateTime(std::get<0>(t), std::get<1>(t), std::get<2>(t));
+			}
+			break;
+		case 4:
+			if (System::Decimal::ToInt32(numericUpDown2->Value) == (*intervalumok)[8] && System::Decimal::ToInt32(numericUpDown3->Value) == (*intervalumok)[9]) {
+				comboBox2->SelectedIndex = (*irany)[4];
+				t = strdatumTotuple((*datumok)[4]);
+				dateTimePicker1->Value = DateTime(std::get<0>(t), std::get<1>(t), std::get<2>(t));
+			}
+			break;
+		case 5:
+			if (System::Decimal::ToInt32(numericUpDown2->Value) == (*intervalumok)[10] && System::Decimal::ToInt32(numericUpDown3->Value) == (*intervalumok)[11]) {
+				comboBox2->SelectedIndex = (*irany)[5];
+				t = strdatumTotuple((*datumok)[5]);
+				dateTimePicker1->Value = DateTime(std::get<0>(t), std::get<1>(t), std::get<2>(t));
+			}
+			break;
+		}
 	}
 	private: System::Void dateTimePicker2_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
 	}
